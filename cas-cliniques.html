@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cas cliniques — Entraînement à l'examen écrit</title>
+<style>
+  :root{
+    --paper:#fbfcfe; --panel:#ffffff; --ink:#15202e; --soft:#4a5568;
+    --line:#dde4ef; --rule:#c8d3e4;
+    --accent:#23407a; --accent-soft:#eaf0fa;
+    --bareme:#8a2b3a; --bareme-soft:#f7ecee;
+    --ok:#12734a; --ok-soft:#e6f4ec; --key:#9a6a00; --key-soft:#fbf3df;
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --shadow:0 2px 16px rgba(20,40,80,.06);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --paper:#0f1622; --panel:#17212f; --ink:#e8eef7; --soft:#a3b1c6;
+      --line:#28374b; --rule:#324258; --accent:#6fa0ea; --accent-soft:#182740;
+      --bareme:#e5798a; --bareme-soft:#2a1820; --ok:#4fca8b; --ok-soft:#12281d;
+      --key:#e6b955; --key-soft:#2a2312; --shadow:0 2px 16px rgba(0,0,0,.4); }
+  }
+  :root[data-theme="light"]{ --paper:#fbfcfe; --panel:#ffffff; --ink:#15202e; --soft:#4a5568;
+    --line:#dde4ef; --accent:#23407a; --accent-soft:#eaf0fa; --bareme:#8a2b3a; --bareme-soft:#f7ecee;
+    --ok:#12734a; --ok-soft:#e6f4ec; --key:#9a6a00; --key-soft:#fbf3df; }
+  :root[data-theme="dark"]{ --paper:#0f1622; --panel:#17212f; --ink:#e8eef7; --soft:#a3b1c6;
+    --line:#28374b; --accent:#6fa0ea; --accent-soft:#182740; --bareme:#e5798a; --bareme-soft:#2a1820;
+    --ok:#4fca8b; --ok-soft:#12281d; --key:#e6b955; --key-soft:#2a2312; }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;font-size:17px;-webkit-text-size-adjust:100%}
+  .wrap{max-width:840px;margin:0 auto;padding:0 20px 90px}
+
+  header.masthead{border-bottom:3px double var(--rule);margin:0 0 8px;padding:30px 0 18px;text-align:center}
+  header.masthead .kicker{font-family:var(--sans);text-transform:uppercase;letter-spacing:.22em;font-size:.72rem;color:var(--bareme);font-weight:700}
+  header.masthead h1{font-family:var(--serif);font-size:2rem;margin:8px 0 6px;font-weight:700;letter-spacing:.01em}
+  header.masthead p{margin:0;color:var(--soft);font-size:.92rem}
+
+  .toolbar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 92%,transparent);
+    backdrop-filter:blur(6px);display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:22px}
+  .btn{font-family:var(--sans);border:1px solid var(--line);background:var(--panel);color:var(--ink);
+    padding:8px 13px;border-radius:9px;font-size:.84rem;font-weight:600;cursor:pointer}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .chrono{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);margin-left:auto;font-size:1rem}
+  .score-pill{font-size:.82rem;color:var(--soft)}
+
+  .howto{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:26px;font-size:.9rem}
+  .howto b{color:var(--accent)}
+  .howto ol{margin:8px 0 0;padding-left:20px}
+
+  .index{columns:2;column-gap:26px;font-size:.9rem;margin:0 0 30px;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+  .index a{display:block;color:var(--ink);text-decoration:none;padding:3px 0;break-inside:avoid}
+  .index a:hover{color:var(--accent)}
+  .index .n{color:var(--bareme);font-weight:700;font-family:var(--serif);margin-right:6px}
+  @media(max-width:640px){.index{columns:1}}
+
+  .dossier{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:26px 28px;margin:0 0 26px;box-shadow:var(--shadow);scroll-margin-top:64px}
+  .dossier > .head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--rule);padding-bottom:12px;margin-bottom:16px;flex-wrap:wrap}
+  .dossier .num{font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--bareme);line-height:1}
+  .dossier h2{font-family:var(--serif);font-size:1.25rem;margin:0;flex:1;min-width:200px}
+  .tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--accent);background:var(--accent-soft);padding:4px 9px;border-radius:20px}
+  .pts-total{font-size:.72rem;color:var(--bareme);font-weight:700;background:var(--bareme-soft);padding:4px 9px;border-radius:20px}
+
+  .enonce{background:color-mix(in srgb,var(--accent-soft) 55%,transparent);border-left:3px solid var(--accent);
+    border-radius:0 10px 10px 0;padding:14px 16px;margin:0 0 18px;font-size:.96rem}
+  .enonce .lbl{display:block;font-family:var(--sans);text-transform:uppercase;letter-spacing:.08em;font-size:.68rem;color:var(--accent);font-weight:700;margin-bottom:6px}
+  .enonce b{color:var(--ink)}
+
+  .q{margin:16px 0 0;padding-top:14px;border-top:1px dashed var(--line)}
+  .q:first-of-type{border-top:none}
+  .q .qline{display:flex;gap:10px;align-items:baseline}
+  .q .qn{font-weight:700;color:var(--accent);font-family:var(--serif);white-space:nowrap}
+  .q .qtext{flex:1;font-weight:600}
+  .q .pts{font-size:.72rem;color:var(--bareme);font-weight:700;white-space:nowrap}
+
+  details.corr{margin:10px 0 0}
+  details.corr > summary{cursor:pointer;list-style:none;font-family:var(--sans);font-size:.82rem;font-weight:700;
+    color:var(--accent);display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border:1px solid var(--line);
+    border-radius:20px;background:var(--panel);user-select:none}
+  details.corr > summary::-webkit-details-marker{display:none}
+  details.corr > summary::before{content:"▸";transition:transform .15s}
+  details.corr[open] > summary::before{transform:rotate(90deg)}
+  details.corr[open] > summary{color:var(--ok);border-color:var(--ok)}
+  .answer{margin-top:10px;background:var(--ok-soft);border:1px solid var(--line);border-left:3px solid var(--ok);
+    border-radius:0 10px 10px 0;padding:14px 16px;font-size:.93rem}
+  .answer h4{margin:0 0 6px;font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+  .answer ul{margin:6px 0;padding-left:20px}
+  .answer li{margin:4px 0}
+  .zero{background:var(--key-soft);border-left:3px solid var(--key);border-radius:0 8px 8px 0;padding:9px 13px;margin:10px 0 0;font-size:.87rem}
+  .zero b{color:var(--key)}
+  .ref{display:block;margin-top:9px;font-size:.8rem;color:var(--soft);font-style:italic}
+  .ref b{font-style:normal;color:var(--accent)}
+
+  footer{text-align:center;color:var(--soft);font-size:.8rem;border-top:1px solid var(--line);padding-top:20px;margin-top:30px}
+  footer a{color:var(--accent)}
+
+  @media print{
+    .toolbar,.howto,.index{display:none}
+    .dossier{box-shadow:none;break-inside:avoid;border:1px solid #bbb}
+    details.corr[open] .answer, .answer{background:#fff}
+    body{background:#fff;font-size:12pt}
+    a[href]{color:#000}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="kicker">Épreuve écrite — Dossiers cliniques progressifs</div>
+    <h1>Cas cliniques d'entraînement</h1>
+    <p>Échographie &amp; Obstétrique — niveau examen · rédige tes réponses, puis révèle la correction</p>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn primary" id="chronoBtn">▷ Démarrer le chrono</button>
+    <button class="btn" id="expandBtn">Tout afficher</button>
+    <button class="btn" id="collapseBtn">Tout masquer</button>
+    <button class="btn" onclick="window.print()">🖨️ Imprimer</button>
+    <span class="chrono" id="chrono">00:00</span>
+  </div>
+
+  <div class="howto">
+    <b>Mode d'emploi (comme le jour J).</b>
+    <ol>
+      <li>Lance le chronomètre et compte <b>~15 min par dossier</b>.</li>
+      <li>Rédige tes réponses <b>sur feuille</b>, en phrases structurées et justifiées — comme à l'écrit.</li>
+      <li>Une fois terminé, clique « <b>Afficher la correction</b> » sous chaque question et compare : coche mentalement chaque point du barème.</li>
+      <li>Les encadrés <span style="color:var(--key);font-weight:700">⚠ Zéro à la question</span> signalent l'erreur éliminatoire à ne jamais commettre.</li>
+    </ol>
+  </div>
+
+  <nav class="index" id="index"><!-- rempli par JS --></nav>
+
+  <!-- ============================================================= -->
+  <!-- DOSSIER 1 -->
+  <section class="dossier" id="d1">
+    <div class="head"><span class="num">1</span><h2>Céphalées et œdèmes à 33 SA</h2>
+      <span class="tag">Surveillance prénatale</span><span class="pts-total">/ 20</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme D., 39 ans, primigeste, consulte à <b>33 SA</b> pour céphalées et œdèmes des membres inférieurs et du visage apparus en 48 h. TA = <b>158/102 mmHg</b> (elle était à 118/70 au 1er trimestre). La bandelette urinaire retrouve une <b>protéinurie ++</b>. Hauteur utérine = 26 cm. L'échographie estime le poids fœtal au 5ᵉ percentile et un index de liquide amniotique (Phelan) à <b>4 cm</b>.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Quel diagnostic principal posez-vous ? Justifiez sur les critères tensionnels.</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Prééclampsie</b> (HTA gravidique + protéinurie après 20 SA).</li>
+        <li>Critère tensionnel : après 20 SA, une <b>hausse de la systolique &gt; 30 mmHg</b> et/ou de la <b>diastolique &gt; 15 mmHg</b> par rapport au 1er trimestre est très évocatrice d'HTA gravidique — ici +40 et +32 mmHg.</li>
+        <li>TA ≥ 160/110 = <b>HTA sévère</b>.</li></ul>
+        <div class="zero"><b>⚠ Zéro à la question :</b> ne pas rattacher la protéinurie et l'HTA → passer à côté de la prééclampsie.</div>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.2 — « une augmentation de la systolique de plus de 30 mm Hg et de la diastolique de plus de 15 mm Hg est très suggestive d'une hypertension gravidique ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Interprétez l'index de liquide amniotique et la hauteur utérine.</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Index de Phelan à 4 cm ⇒ <b>oligoamnios</b> (index ≤ 5 cm).</li>
+        <li>HU à 26 cm à 33 SA = <b>inférieure à l'attendu</b> + poids au 5ᵉ percentile ⇒ <b>retard de croissance intra-utérin (RCIU)</b>.</li>
+        <li>Cohérent avec une <b>insuffisance placentaire</b> compliquant la prééclampsie.</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.2 — « Si l'index est ≤ 5, on parle d'oligoamnios ou oligohydramnios ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Citez les signes de gravité à rechercher immédiatement (au moins 5).</span><span class="pts">6 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue (prééclampsie sévère)</h4>
+        <ul><li>Neuro : céphalées rebelles, <b>phosphènes, acouphènes</b>, réflexes vifs (imminence d'éclampsie).</li>
+        <li>Douleur épigastrique « en barre » / de l'hypochondre droit (<b>HELLP</b>).</li>
+        <li>Oligurie, protéinurie massive, créatinine élevée.</li>
+        <li>Biologie : thrombopénie, cytolyse hépatique, hémolyse (<b>HELLP syndrome</b>).</li>
+        <li>Fœtal : RCIU sévère, oligoamnios, anomalies du RCF au monitoring.</li></ul>
+        <div class="zero"><b>⚠ Zéro à la question :</b> renvoyer la patiente à domicile sans hospitalisation.</div>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q4.</span><span class="qtext">Quelle est votre conduite à tenir en urgence (grandes lignes) ?</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Hospitalisation</b> en urgence (maternité de niveau adapté au terme).</li>
+        <li>Bilan de prééclampsie : NFS-plaquettes, transaminases, LDH, haptoglobine, uricémie, créatinine, protéinurie des 24 h, bilan d'hémostase.</li>
+        <li><b>Traitement antihypertenseur</b> pour HTA sévère + <b>sulfate de magnésium</b> si signes neurologiques (prévention de l'éclampsie).</li>
+        <li><b>Corticothérapie</b> de maturation pulmonaire fœtale (33 SA).</li>
+        <li>Surveillance materno-fœtale rapprochée ; seul traitement curatif = <b>extraction</b> selon gravité et terme.</li></ul>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 2 -->
+  <section class="dossier" id="d2">
+    <div class="head"><span class="num">2</span><h2>Fœtus en siège à 37 SA</h2>
+      <span class="tag">Présentation du siège</span><span class="pts-total">/ 20</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme K., 2ᵉ geste, consulte à <b>37 SA</b>. Le palper abdominal retrouve au fond utérin une masse dure, régulière et arrondie ; l'échographie confirme une <b>présentation du siège décomplété</b>. Bassin cliniquement normal, poids fœtal estimé à 3 100 g, liquide amniotique normal, placenta fundique.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Le pôle dur et arrondi au fond utérin correspond à quel pôle fœtal ? Qu'en déduisez-vous sur la présentation ?</span><span class="pts">3 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Une masse <b>régulièrement arrondie, dure et de petit volume</b> au fond = <b>pôle céphalique</b> (tête).</li>
+        <li>La tête étant en haut ⇒ le siège se présente au détroit supérieur : <b>présentation podalique</b>.</li>
+        <li>(1re manœuvre de Léopold — palpation du fond utérin.)</li></ul>
+        <span class="ref">Réf. : <b>OBSTETRIQUE-Module 5</b>, p.2 — « soit par la tête : masse régulièrement arrondie, de consistance dure et de plus petit volume ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Définissez le siège décomplété et différenciez-le du siège complet.</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Siège décomplété (franc)</b> : fesses en bas, <b>jambes étendues vers le haut</b> (pieds près de la tête).</li>
+        <li><b>Siège complet</b> : fesses en bas, <b>jambes repliées</b> (genoux fléchis, pieds près des fesses).</li>
+        <li>(3ᵉ type : siège pieds/podalique = un ou deux pieds en premier.)</li></ul>
+        <span class="ref">Réf. : <b>La présentation en siège</b>, p.1 — « Siège décomplété (ou franc) : Les fesses sont en bas avec les jambes étendues vers le haut ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Une VME est envisagée. Précisez le terme optimal, les conditions de sécurité et 3 contre-indications.</span><span class="pts">6 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Terme : <b>36–37 SA</b>.</li>
+        <li>Sécurité : sous <b>surveillance échographique et cardiotocographique</b>, en milieu permettant une césarienne en urgence.</li>
+        <li>Contre-indications : <b>placenta praevia</b>, <b>oligohydramnios</b>, <b>anomalies fœtales majeures</b> (+ utérus cicatriciel, RCIU sévère, anomalie du RCF).</li></ul>
+        <span class="ref">Réf. : <b>La présentation en siège</b>, p.4 — « Réalisée vers 36-37 semaines de grossesse » ; « Contre-indications : Placenta prævia, oligohydramnios, anomalies fœtales majeures ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q4.</span><span class="qtext">La VME échoue. Deux voies d'accouchement sont discutées. Argumentez, et donnez la complication fœtale majeure du siège en cours de travail.</span><span class="pts">7 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Voie basse acceptée</b> si conditions réunies : bassin adéquat, poids fœtal estimé adéquat, absence d'anomalie, obstétricien expérimenté, surveillance étroite.</li>
+        <li><b>Césarienne programmée</b> (vers 39 SA) si conditions défavorables (siège pieds, macrosomie/faible poids, bassin limite…).</li>
+        <li>Pendant le travail : <b>monitoring cardiotocographique continu</b>.</li>
+        <li>Complication fœtale majeure : <b>procidence (prolapsus) du cordon</b> → hypoxie/asphyxie ; aussi dystocie des épaules/tête dernière.</li></ul>
+        <div class="zero"><b>⚠ Zéro à la question :</b> proposer une voie basse sans surveillance continue du RCF.</div>
+        <span class="ref">Réf. : <b>La présentation en siège</b>, p.3 &amp; p.5 — « Prolapsus du cordon ombilical… » ; « Césarienne programmée : Planifiée généralement vers 39 semaines ».</span>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 3 -->
+  <section class="dossier" id="d3">
+    <div class="head"><span class="num">3</span><h2>Évaluation du bassin osseux</h2>
+      <span class="tag">Bassin (Module 4)</span><span class="pts-total">/ 15</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Lors de la préparation d'un accouchement, l'interne révise l'anatomie du bassin obstétrical, divisé en trois étages : détroit supérieur, moyen et inférieur.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Quel diamètre du détroit supérieur est « obstétricalement important » ? Donnez son autre nom et sa valeur.</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Le diamètre <b>promonto-rétro-pubien</b>, alias <b>« Obstetrical Conjugate »</b>, valeur <b>10 cm</b>.</li>
+        <li>C'est la <b>plus courte distance</b> entre le promontoire et le pubis (franchie par la présentation).</li></ul>
+        <span class="ref">Réf. : <b>OBSTETRIQUE-Module 4</b>, p.1 — « C'est le « Obstetrical Conjugate » (10 cm). C'est la plus courte distance entre le promontoire et le pubis ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Quel est le plus petit diamètre du pelvis, où se situe-t-il et combien mesure-t-il ?</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Le <b>diamètre bi-épineux</b>, diamètre transverse du <b>détroit moyen</b>, mesure <b>10 cm</b>.</li>
+        <li>C'est le <b>plus petit diamètre du pelvis</b> — étape clé de la descente.</li></ul>
+        <span class="ref">Réf. : <b>OBSTETRIQUE-Module 4</b>, p.2 — « le diamètre bi-épineux (10 cm) est le plus petit diamètre du pelvis ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Le détroit inférieur est le plan de dégagement : donnez le diamètre bi-ischiatique et le sacro-sous-pubien.</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Bi-ischiatique : <b>11 à 12 cm</b> ; sacro-sous-pubien : <b>12 cm</b>.</li></ul>
+        <span class="ref">Réf. : <b>OBSTETRIQUE-Module 4</b>, p.3 — « Diamètre bi-ischiatique : 11 à 12 cm ; diamètre sacro sous pubien : 12 cm ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q4.</span><span class="qtext">Dans quel diamètre du détroit supérieur se fait le plus souvent l'engagement ? Valeur ?</span><span class="pts">3 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Dans l'un des <b>diamètres obliques</b> (droit ou gauche), <b>12,5 cm</b>.</li></ul>
+        <span class="ref">Réf. : <b>OBSTETRIQUE-Module 4</b>, p.1 — « C'est dans l'un de ces diamètres que se fait le plus souvent l'engagement ».</span>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 4 -->
+  <section class="dossier" id="d4">
+    <div class="head"><span class="num">4</span><h2>Contractions à terme : vrai ou faux travail ?</h2>
+      <span class="tag">Intrapartum (Module 5)</span><span class="pts-total">/ 18</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme R., 3ᵉ pare, 39 SA, se présente pour des contractions depuis 4 h. Le col est long, postérieur, non modifié au toucher. Elle décrit des contractions irrégulières, peu douloureuses, cédant au repos.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Définissez le « travail » et dites s'il est ici installé. Justifiez.</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Le travail = <b>processus par lequel des contractions utérines rythmiques aboutissent à l'expulsion du fœtus</b>, avec des CU de fréquence, d'intensité et de durée suffisantes pour <b>dilater et effacer le col</b>.</li>
+        <li>Ici col <b>non modifié</b> + contractions irrégulières cédant au repos ⇒ <b>faux travail (Braxton Hicks)</b>, pas de travail installé.</li></ul>
+        <span class="ref">Réf. : <b>OBSTETRIQUE-Module 5</b>, p.1 — « des contractions rythmiques utérines aboutissent à l'expulsion du fœtus » ; « ces contractions de Braxton Hicks (faux travail) n'entrainent pas de modifications du col ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Citez 3 situations qui, à l'inverse, imposent à la gestante de se rendre à l'hôpital.</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Contractions régulières et rapprochées (≈ toutes les 5 min).</li>
+        <li>Écoulement de <b>liquide amniotique</b> (rupture prématurée des membranes).</li>
+        <li>Saignement vaginal significatif.</li>
+        <li>Diminution nette des mouvements actifs fœtaux.</li></ul>
+        <span class="ref">Réf. : <b>OBSTETRIQUE-Module 5</b>, p.1 — « Elle passe du liquide amniotique témoignant d'une rupture prématurée des membranes ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Décrivez les 4 conditions d'un bon examen obstétrical et l'apport des manœuvres de Léopold.</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Conditions : <b>décubitus dorsal, paroi relâchée, vessie vide, en dehors des contractions, rectum vide</b>.</li>
+        <li>Léopold (4 temps) : pôle du fond, plan du dos (position), pôle sus-pubien (descente/engagement), engagement.</li></ul>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q4.</span><span class="qtext">La HU mesure 38 cm. Qu'évoque cette valeur et quelles conséquences pour l'accouchement ?</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>HU &gt; 36 cm = <b>excessive</b> ⇒ suspicion de <b>macrosomie</b> (ou hydramnios / grossesse multiple).</li>
+        <li>Risques : dystocie des épaules, disproportion fœto-pelvienne, hémorragie de la délivrance ⇒ estimation pondérale échographique + anticipation.</li></ul>
+        <span class="ref">Réf. : <b>OBSTETRIQUE-Module 5</b>, p.2 — « La mesure de la Hauteur Utérine (si > 36 cm, elle est excessive, donc suspicion de macrosomie) ».</span>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 5 -->
+  <section class="dossier" id="d5">
+    <div class="head"><span class="num">5</span><h2>Dépistage de la trisomie 21</h2>
+      <span class="tag">Surveillance prénatale</span><span class="pts-total">/ 18</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme T., <b>39 ans</b>, enceinte de 12 SA. L'échographie mesure une <b>clarté nucale à 4 mm</b>. Le triple test réalisé à 15 SA montre : <b>AFP basse, β-hCG élevée, estriol bas</b>.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Interprétez la clarté nucale. Quel est le seuil pathologique retenu ?</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Clarté nucale = <b>4 mm</b>, supérieure au seuil : <b>&gt; 3 mm = indice fort d'anomalie chromosomique</b> (mesurée vers 12 SA).</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.2 — « une clarté nucale supérieure à 3mm est un indice fort d'anomalie chromosomique ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Interprétez le profil des 3 marqueurs sériques. Vers quelle anomalie orientent-ils ?</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>AFP ↓, hCG ↑, estriol ↓ = profil de la <b>trisomie 21 (Down)</b>.</li>
+        <li>(À distinguer de la trisomie 18 : les 3 marqueurs abaissés ; défaut du tube neural : AFP ↑.)</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.4 — tableau « Down syndrome (69%) : AFP ↓, hCG ↑, Estriol ↓ ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Quel examen de confirmation proposez-vous ? Citez 2 indications présentes ici et le risque principal.</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Amniocentèse</b> (caryotype fœtal), possible dès la <b>13ᵉ–14ᵉ SA</b>, sous contrôle échographique.</li>
+        <li>Indications ici : <b>âge &gt; 35 ans</b>, <b>marqueurs anormaux</b> + clarté nucale augmentée.</li>
+        <li>Risque principal : <b>perte fœtale ≤ 0,5 %</b>.</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.5 — « L'amniocentèse est possible à partir des 13e ou 14e semaines d'aménorrhée » ; « Taux de perte fœtale ≤ 0,5 % ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q4.</span><span class="qtext">Citez les 4 marqueurs échographiques de trisomie 21.</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Clarté nucale <b>augmentée</b> ; os propres du nez <b>absents</b> ; Doppler du <b>ductus venosus anormal</b> ; <b>régurgitation tricuspide</b> présente.</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.4.</span>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 6 -->
+  <section class="dossier" id="d6">
+    <div class="head"><span class="num">6</span><h2>Douleur de l'hypochondre droit</h2>
+      <span class="tag">Échographie abdominale</span><span class="pts-total">/ 15</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      M. B., 54 ans, obèse, adressé pour une échographie abdominale devant une pesanteur de l'hypochondre droit. L'examen retrouve un foie <b>homogène, brillant, « plus blanc » que le rein droit</b>, mesuré à 16,5 cm ; vésicule à paroi fine, contenu noir.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Quelle préparation le patient devait-il respecter et pourquoi ?</span><span class="pts">3 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>À jeun 8 heures</b> : distension vésiculaire optimale et réduction des gaz digestifs gênant l'exploration.</li></ul>
+        <span class="ref">Réf. : <b>Échographie abdominale</b>, p.5 — « À jeun 8 heures avant l'éxamen ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Interprétez l'aspect du foie. Quel diagnostic ? Est-il symptomatique ?</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Foie <b>hyperéchogène</b> (« plus blanc que le rein ») = <b>stéatose hépatique</b> (foie gras).</li>
+        <li>Le plus souvent <b>asymptomatique</b> ; parfois fatigue/pesanteur de l'HCD.</li></ul>
+        <span class="ref">Réf. : <b>Échographie abdominale</b>, p.11 — « Foie hyperéchogène (plus blanc que le rein) ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Le foie mesure 16,5 cm : comment le qualifiez-vous, et quelle est l'échogénicité hépatique normale de référence ?</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Taille &gt; 15 cm ⇒ <b>hépatomégalie</b>.</li>
+        <li>Foie normal : échogénicité <b>homogène, supérieure au rein et inférieure à la rate</b>.</li></ul>
+        <span class="ref">Réf. : <b>Échographie abdominale</b>, p.7 — « >15 cm hépatomégalie » ; « Échogénicité : Homogène, > rein et < rate ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q4.</span><span class="qtext">La vésicule a une paroi fine à contenu « noir » : donnez la normale de la paroi et le terme décrivant ce contenu.</span><span class="pts">3 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Paroi vésiculaire normale : <b>&lt; 3 mm</b>.</li>
+        <li>Contenu liquidien pur = <b>anéchogène</b> (noir).</li></ul>
+        <span class="ref">Réf. : <b>Échographie abdominale</b>, p.13 — « Paroi < 3 mm » ; « Échogénicité : Contenu anéchogène ».</span>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 7 -->
+  <section class="dossier" id="d7">
+    <div class="head"><span class="num">7</span><h2>Ménométrorragies et masse pelvienne</h2>
+      <span class="tag">Échographie pelvienne</span><span class="pts-total">/ 15</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme F., 43 ans, consulte pour ménorragies. L'échographie pelvienne (voie sus-pubienne puis endovaginale) retrouve une <b>masse bien limitée, hypoéchogène, au sein du myomètre</b>, déformant la cavité.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Pourquoi débuter par la voie sus-pubienne avec vessie pleine, puis compléter par l'endovaginale ?</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Voie sus-pubienne : la <b>vessie pleine est indispensable</b> (fenêtre acoustique, vue d'ensemble).</li>
+        <li>Voie endovaginale : <b>meilleure résolution</b> pour l'utérus et les ovaires.</li></ul>
+        <span class="ref">Réf. : <b>Échographie pelvienne</b>, p.2 — « Voie sus-pubienne : vessie pleine indispensable » ; « Voie endovaginale : meilleure résolution ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Quel diagnostic évoquez-vous ? Donnez les critères échographiques.</span><span class="pts">6 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Fibrome utérin</b> (tumeur bénigne du myomètre).</li>
+        <li>Critères : masse <b>bien limitée</b>, <b>généralement hypoéchogène</b>, parfois calcifications, <b>déformation du myomètre/de la cavité</b> selon la localisation.</li></ul>
+        <span class="ref">Réf. : <b>Échographie pelvienne</b>, p.8 — « Masse bien limitée / Généralement hypoéchogène / Parfois calcifications ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Différenciez à l'échographie un fibrome, un kyste ovarien simple et des ovaires micropolykystiques (OMPK).</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Fibrome</b> : masse solide hypoéchogène du myomètre.</li>
+        <li><b>Kyste ovarien simple</b> : formation liquidienne <b>anéchogène</b> à parois fines.</li>
+        <li><b>OMPK</b> : <b>nombreux petits follicules (2–9 mm)</b> disposés en périphérie de l'ovaire.</li></ul>
+        <span class="ref">Réf. : <b>Échographie pelvienne</b>, p.10 — « nombreux petits follicules (2–9 mm), souvent disposés en périphérie de l'ovaire ».</span>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 8 -->
+  <section class="dossier" id="d8">
+    <div class="head"><span class="num">8</span><h2>Choix du matériel échographique</h2>
+      <span class="tag">Échographie — principes</span><span class="pts-total">/ 14</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      En stage d'imagerie, on vous demande de justifier vos réglages pour différents examens et d'interpréter le vocabulaire d'échogénicité.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Quelle sonde et quelle fréquence pour une échographie obstétricale par voie abdominale ? Et pour une voie endovaginale ?</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Abdominale/obstétrique : sonde <b>convexe 2–5 MHz</b> (faisceau divergent).</li>
+        <li>Endovaginale : sonde <b>endocavitaire 5–9 MHz</b>.</li></ul>
+        <span class="ref">Réf. : <b>Initiation à l'échographie</b>, p.12 — « Convexe : faisceau divergent 2–5 MHz … Abdomen, pelvis, obstétrique » ; « Endocavitaire … 5–9 MHz ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Énoncez la relation fréquence / résolution / pénétration.</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Plus la fréquence est <b>élevée</b> ⇒ <b>meilleure résolution</b> mais <b>moindre pénétration</b> (et inversement).</li></ul>
+        <span class="ref">Réf. : <b>Initiation à l'échographie</b>, p.11 — « Plus la fréquence est élevée, meilleure est la résolution, mais la pénétration est moindre — et inversement ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Définissez « anéchogène » et « hyperéchogène » avec un exemple chacun.</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Anéchogène</b> : ne renvoie aucun écho → image <b>noire</b> ; ex. liquide pur (vessie pleine, kyste simple).</li>
+        <li><b>Hyperéchogène</b> : renvoie beaucoup d'échos → <b>blanc/brillant</b> ; ex. les <b>calculs</b> (et la stéatose).</li></ul>
+        <span class="ref">Réf. : <b>Initiation à l'échographie</b>, p.26–27.</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q4.</span><span class="qtext">Citez 2 limites de l'échographie.</span><span class="pts">2 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Opérateur-dépendante ; gênée par l'obésité et les gaz ; ne traverse <b>pas les os ni l'air</b> (poumon, intestin).</li></ul>
+        <span class="ref">Réf. : <b>Initiation à l'échographie</b>, p.23.</span>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 9 -->
+  <section class="dossier" id="d9">
+    <div class="head"><span class="num">9</span><h2>Métrorragies du 3ᵉ trimestre</h2>
+      <span class="tag">ECN — gynéco-obstétrique</span><span class="pts-total">/ 16</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme L., 31 ans, 34 SA, présente des <b>métrorragies</b>. Deux grands diagnostics s'opposent : le <b>placenta praevia</b> et l'<b>hématome rétroplacentaire (HRP)</b>.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Opposez les 2 diagnostics : douleur, caractère du saignement, tonus utérin.</span><span class="pts">6 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Placenta praevia</b> : saignement <b>indolore</b>, sang <b>rouge vif</b>, utérus <b>souple</b>.</li>
+        <li><b>HRP</b> : <b>douleur brutale</b> « en coup de poignard », sang <b>noirâtre</b> (parfois minime), utérus <b>hypertonique</b> (« de bois ») — urgence vitale.</li></ul>
+        <div class="zero"><b>⚠ Zéro à la question :</b> réaliser un <b>toucher vaginal</b> avant d'avoir éliminé un placenta praevia par l'échographie (risque hémorragique).</div>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Quel examen d'imagerie non invasif localise le placenta ?</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Échographie obstétricale</b> (sonde convexe) : localisation placentaire et rapport à l'orifice interne du col ; recherche d'un hématome.</li></ul>
+        <span class="ref">Réf. : <b>ECN — le tout-en-un</b>, section Gynéco-Obstétrique (hémorragies génitales, pp. 293–298).</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Principes de prise en charge en urgence (grandes lignes).</span><span class="pts">6 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Urgence : hospitalisation, 2 voies veineuses, bilan (NFS, groupe-Rhésus-RAI, hémostase, fibrinogène), surveillance materno-fœtale (RCF).</li>
+        <li>HRP avec souffrance fœtale ou gravité maternelle ⇒ <b>césarienne en urgence</b>.</li>
+        <li>Placenta praevia peu hémorragique : expectative surveillée + corticothérapie ; césarienne si praevia recouvrant ou hémorragie grave.</li>
+        <li>Prévention de l'allo-immunisation Rhésus si mère Rh négatif.</li></ul>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 10 -->
+  <section class="dossier" id="d10">
+    <div class="head"><span class="num">10</span><h2>Première consultation de grossesse</h2>
+      <span class="tag">Surveillance prénatale</span><span class="pts-total">/ 16</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme S., 26 ans, consulte pour un retard de règles et un test de grossesse positif. Il s'agit de sa 1re consultation prénatale.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Quand doit avoir lieu la 1re visite et quels en sont les buts principaux ?</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Avant la <b>fin du 3ᵉ mois</b>.</li>
+        <li>Buts : <b>confirmer la grossesse</b>, préciser l'<b>âge gestationnel</b> (DDR, DPA, longueur cranio-caudale), rechercher les <b>facteurs de risque</b>, examen clinique + échographie.</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.1 — « Doit avoir lieu avant la fin du 3e mois ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Détaillez le bilan biologique prénatal initial (au moins 5 éléments) et l'acronyme TORCH.</span><span class="pts">6 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Groupe sanguin + <b>Rhésus</b>, hémogramme complet.</li>
+        <li>Sérologies : <b>rubéole, toxoplasmose, VIH, hépatite B</b>.</li>
+        <li>Dépistage : VDRL, gonocoque, chlamydia ; protéinurie/glycosurie.</li>
+        <li><b>TORCH</b> = <b>To</b>xoplasmose, <b>R</b>ubéole, <b>C</b>ytomégalovirus, <b>H</b>erpes simplex, <b>V</b>IH.</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.2 — « TORCH screen: (Toxoplasmose, Rubéole, Cytomémalovirus, Herpes simplex, HIV) ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Quel est le calendrier de fréquence des visites prénatales ?</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Avant 28 SA : <b>chaque mois</b>.</li>
+        <li>28–36 SA : <b>toutes les 2–3 semaines</b>.</li>
+        <li>À partir de 36 SA : <b>1 fois par semaine</b>.</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.1.</span>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 11 -->
+  <section class="dossier" id="d11">
+    <div class="head"><span class="num">11</span><h2>Diabète gestationnel &amp; macrosomie</h2>
+      <span class="tag">ECN — gynéco-obstétrique</span><span class="pts-total">/ 15</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme A., 34 ans, IMC élevé, antécédent familial de diabète. À 30 SA, l'échographie retrouve une <b>macrosomie</b> et un <b>excès de liquide amniotique</b>.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Quel diagnostic évoquez-vous et quels facteurs de risque sont présents ?</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Diabète gestationnel</b>.</li>
+        <li>Facteurs : <b>surpoids/IMC élevé, âge, antécédents familiaux de diabète</b> (± ATCD de macrosomie).</li></ul>
+        <span class="ref">Réf. : <b>ECN — le tout-en-un</b>, section Gynéco-Obstétrique (diabète gestationnel, ~p.296).</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Reliez l'excès de liquide amniotique à ce diagnostic. Donnez le seuil d'hydramnios (index de Phelan).</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Le <b>polyhydramnios</b> peut témoigner d'un <b>diabète gestationnel mal contrôlé</b> (aussi malformation, infection, grossesse multiple).</li>
+        <li>Hydramnios : index de Phelan <b>&gt; 25 cm</b> (normal 8–18 cm).</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.2 — « Le poly hydramnios peut signifier un diabète gestationnel mal contrôlé… » ; « Si l'index est >25, on parle de polyhydramnios ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Citez 2 complications obstétricales de la macrosomie.</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Dystocie des épaules</b>, disproportion fœto-pelvienne, césarienne, hémorragie de la délivrance ; hypoglycémie néonatale.</li></ul>
+      </div></details></div>
+  </section>
+
+  <!-- DOSSIER 12 -->
+  <section class="dossier" id="d12">
+    <div class="head"><span class="num">12</span><h2>Douleur pelvienne et aménorrhée</h2>
+      <span class="tag">ECN — gynéco-obstétrique</span><span class="pts-total">/ 15</span></div>
+    <div class="enonce"><span class="lbl">Énoncé</span>
+      Mme M., 28 ans, présente une <b>aménorrhée de 7 SA</b>, des douleurs pelviennes latéralisées et des métrorragies brunâtres. β-hCG positif mais l'échographie endovaginale ne retrouve <b>pas de sac gestationnel intra-utérin</b>.</div>
+
+    <div class="q"><div class="qline"><span class="qn">Q1.</span><span class="qtext">Quel diagnostic devez-vous éliminer en priorité ? Pourquoi est-ce une urgence ?</span><span class="pts">6 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Grossesse extra-utérine (GEU)</b> : association β-hCG positif + <b>vacuité utérine</b> + douleur/métrorragies.</li>
+        <li>Urgence : risque de <b>rupture tubaire</b> et d'<b>hémorragie intrapéritonéale</b> (pronostic vital).</li></ul>
+        <div class="zero"><b>⚠ Zéro à la question :</b> conclure à une grossesse normale devant un β-hCG positif sans vérifier la localisation intra-utérine.</div>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q2.</span><span class="qtext">Rappelez à partir de quelle valeur de β-hCG l'échographie endovaginale doit voir un sac intra-utérin, et l'intérêt de l'échographie précoce.</span><span class="pts">5 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li>Par voie <b>endovaginale</b>, une grossesse de 3–4 SA (β-hCG ≈ <b>1 000–2 000 mUI/mL</b>) doit être visible ; par voie abdominale, sac visible à 5–6 SA (β-hCG ≈ 5 000–6 000).</li>
+        <li>L'échographie permet d'<b>écarter/confirmer une grossesse extra-utérine, molaire ou un avortement</b>.</li></ul>
+        <span class="ref">Réf. : <b>Surveillance prénatale</b>, p.2 — « La voie endovaginale permet de détecter une grossesse de 3 ou 4 semaines correspondant à une concentration de B-HCG de 1,000 à 2,000 mU/mL » ; « permet en outre d'écarter ou de confirmer une grossesse extra utérine ».</span>
+      </div></details></div>
+
+    <div class="q"><div class="qline"><span class="qn">Q3.</span><span class="qtext">Quels sont les 2 piliers de la surveillance/décision devant une suspicion de GEU ?</span><span class="pts">4 pts</span></div>
+      <details class="corr"><summary>Afficher la correction</summary><div class="answer">
+        <h4>Réponse attendue</h4>
+        <ul><li><b>Cinétique des β-hCG</b> (dosages répétés) + <b>échographie endovaginale</b>.</li>
+        <li>Prise en charge (selon stabilité) : expectative, traitement médical (méthotrexate) ou chirurgical (cœlioscopie) ; urgence chirurgicale si rupture/instabilité.</li></ul>
+      </div></details></div>
+  </section>
+
+  <footer>
+    Dossiers cliniques d'entraînement — support pédagogique de niveau examen. À confronter aux référentiels officiels et à l'enseignement de tes professeurs.<br>
+    Autres outils : <a href="quiz.html">Quiz QCM (430 questions)</a> · <a href="fiches-revision.html">Fiches de révision</a>
+  </footer>
+</div>
+
+<script>
+// ---- Chronomètre ----
+(function(){
+  var el=document.getElementById('chrono'), btn=document.getElementById('chronoBtn'), t=0, id=null;
+  function fmt(s){var m=Math.floor(s/60);return (m<10?'0':'')+m+':'+((s%60)<10?'0':'')+(s%60);}
+  btn.onclick=function(){
+    if(id){clearInterval(id);id=null;btn.textContent='▷ Reprendre';}
+    else{id=setInterval(function(){t++;el.textContent=fmt(t);},1000);btn.textContent='❚❚ Pause';}
+  };
+})();
+// ---- Tout afficher / masquer ----
+function allDetails(open){
+  Array.from(document.querySelectorAll('details.corr')).forEach(function(d){d.open=open;});
+}
+document.getElementById('expandBtn').onclick=function(){allDetails(true);};
+document.getElementById('collapseBtn').onclick=function(){allDetails(false);};
+// ---- Sommaire auto ----
+(function(){
+  var idx=document.getElementById('index'), secs=Array.from(document.querySelectorAll('.dossier'));
+  secs.forEach(function(s){
+    var num=s.querySelector('.num').textContent, title=s.querySelector('h2').textContent, tag=s.querySelector('.tag').textContent;
+    var a=document.createElement('a'); a.href='#'+s.id;
+    a.innerHTML='<span class="n">'+num+'.</span>'+title+' — <span style="color:var(--soft);font-size:.85em">'+tag+'</span>';
+    idx.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>
