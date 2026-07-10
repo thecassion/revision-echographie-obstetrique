@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiches de révision — Échographie & Obstétrique</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --panel:#ffffff; --ink:#1a2233; --muted:#5a6784;
+    --line:#e4e8f2; --brand:#2563a8; --brand-soft:#eaf1fa;
+    --echo:#2563a8; --abdo:#0f9d8e; --pelv:#a4508b; --prenat:#c0562a; --siege:#8a5a1c;
+    --ok:#1a8a5a; --warn:#c0392b; --key:#f5b301;
+    --radius:14px; --shadow:0 2px 14px rgba(30,45,80,.07);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px}
+  a{color:var(--brand);text-decoration:none}
+
+  /* Layout */
+  .wrap{display:grid;grid-template-columns:270px 1fr;max-width:1240px;margin:0 auto;gap:0}
+  nav.toc{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line);padding:22px 18px}
+  main{padding:34px 40px 90px;min-width:0}
+
+  /* Header */
+  .brandbar{padding:6px 0 16px;border-bottom:1px solid var(--line);margin-bottom:14px}
+  .brandbar h1{font-size:1.15rem;margin:0 0 3px;line-height:1.25}
+  .brandbar p{margin:0;font-size:.8rem;color:var(--muted)}
+
+  .toc h4{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:18px 0 7px}
+  .toc a{display:block;padding:6px 10px;border-radius:8px;color:var(--ink);font-size:.9rem;border-left:3px solid transparent}
+  .toc a:hover{background:var(--brand-soft)}
+  .toc a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle}
+
+  .hero{background:linear-gradient(120deg,#243b63,#2f6fb0);color:#fff;border-radius:var(--radius);padding:30px 34px;margin-bottom:26px;box-shadow:var(--shadow)}
+  .hero h2{margin:0 0 6px;font-size:1.7rem}
+  .hero p{margin:0;opacity:.92;max-width:60ch}
+  .hero .pills{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+  .hero .pills span{background:rgba(255,255,255,.16);padding:5px 12px;border-radius:20px;font-size:.8rem}
+
+  section{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px;margin-bottom:22px;box-shadow:var(--shadow);scroll-margin-top:16px}
+  section > h2{margin:0 0 4px;font-size:1.35rem;display:flex;align-items:center;gap:10px}
+  section .lead{color:var(--muted);margin:0 0 18px;font-size:.92rem}
+  .tag{font-size:.7rem;font-weight:700;color:#fff;padding:3px 10px;border-radius:20px;letter-spacing:.03em}
+  h3{margin:22px 0 8px;font-size:1.06rem;color:var(--ink)}
+  h3:first-of-type{margin-top:6px}
+  ul,ol{margin:6px 0 14px;padding-left:22px}
+  li{margin:3px 0}
+  p{margin:8px 0}
+
+  table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:.9rem}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  th{background:var(--brand-soft);font-weight:700}
+  tr:nth-child(even) td{background:#fafbfe}
+
+  .key{border-left:4px solid var(--key);background:#fffaed;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+  .key b{color:#8a6d00}
+  .danger{border-left:4px solid var(--warn);background:#fdeeec;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+  .good{border-left:4px solid var(--ok);background:#eaf7f0;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fdfefe}
+  .card h4{margin:0 0 6px;font-size:.98rem}
+
+  .mnemo{display:inline-block;background:var(--brand);color:#fff;font-weight:700;border-radius:6px;padding:1px 7px;font-size:.85rem}
+  code{background:#eef1f7;padding:1px 6px;border-radius:5px;font-size:.86em}
+
+  .backtop{position:fixed;right:18px;bottom:18px;background:var(--brand);color:#fff;border:none;border-radius:50%;width:46px;height:46px;font-size:1.2rem;cursor:pointer;box-shadow:var(--shadow);display:none}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
+  .btn{display:inline-block;background:var(--brand);color:#fff;padding:9px 16px;border-radius:9px;font-size:.88rem;font-weight:600;cursor:pointer;border:none}
+  .btn.ghost{background:#fff;color:var(--brand);border:1px solid var(--brand)}
+
+  footer{color:var(--muted);font-size:.8rem;text-align:center;padding:20px}
+
+  @media (max-width:900px){
+    .wrap{grid-template-columns:1fr}
+    nav.toc{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+    main{padding:22px 18px 70px}
+    .grid2{grid-template-columns:1fr}
+  }
+  @media print{
+    nav.toc,.backtop,.toolbar{display:none}
+    .wrap{grid-template-columns:1fr}
+    section{box-shadow:none;break-inside:avoid;border:1px solid #ccc}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="toc">
+    <div class="brandbar">
+      <h1>Fiches de révision</h1>
+      <p>Échographie &amp; Obstétrique · FSSA / UniQ</p>
+    </div>
+    <h4>Sommaire</h4>
+    <a href="#echo"><span class="dot" style="background:var(--echo)"></span>1 · Échographie — principes</a>
+    <a href="#abdo"><span class="dot" style="background:var(--abdo)"></span>2 · Échographie abdominale</a>
+    <a href="#pelv"><span class="dot" style="background:var(--pelv)"></span>3 · Échographie pelvienne</a>
+    <a href="#prenat"><span class="dot" style="background:var(--prenat)"></span>4 · Surveillance prénatale</a>
+    <a href="#siege"><span class="dot" style="background:var(--siege)"></span>5 · Présentation du siège</a>
+    <h4>Outils</h4>
+    <a href="#memo">🎯 Points clés à retenir</a>
+    <a href="quiz.html">📝 Lancer le Quiz →</a>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <h2>Préparation aux examens — QCM &amp; Quiz</h2>
+      <p>Synthèse structurée des cours d'échographie et d'obstétrique. Chaque fiche est conçue pour la mémorisation active : lisez, cachez, restituez, puis validez avec le quiz interactif.</p>
+      <div class="pills">
+        <span>Échographie générale</span><span>Abdominale</span><span>Pelvienne</span>
+        <span>Surveillance prénatale</span><span>Présentation du siège</span>
+      </div>
+      <div class="toolbar">
+        <a class="btn" href="quiz.html">📝 S'entraîner au Quiz</a>
+        <button class="btn ghost" onclick="window.print()">🖨️ Imprimer / PDF</button>
+      </div>
+    </div>
+
+    <!-- ============ 1. ÉCHOGRAPHIE ============ -->
+    <section id="echo">
+      <h2><span class="tag" style="background:var(--echo)">FICHE 1</span> Échographie — principes fondamentaux</h2>
+      <p class="lead">Physique des ultrasons · sonde · modes · échogénicité · avantages et limites.</p>
+
+      <h3>Définition</h3>
+      <p>L'échographie (ou ultrasonographie) est une technique d'imagerie <b>non invasive</b>, <b>sans rayonnements ionisants</b>, indolore, portable et rapide, qui utilise les <b>ultrasons</b> pour produire des images en temps réel des organes internes, des tissus mous et du flux sanguin.</p>
+      <div class="key"><b>À retenir :</b> un <b>ultrason</b> = onde sonore de haute fréquence, <b>&gt; 20 000 Hz (20 kHz)</b>, inaudible pour l'homme.</div>
+
+      <h3>Principe physique</h3>
+      <p>La <b>sonde (transducteur)</b> émet des ultrasons grâce à des <b>cristaux piézoélectriques</b> qui transforment l'énergie électrique en ultrasons (et inversement). Les échos renvoyés par les tissus sont captés par la sonde, convertis en signaux électriques puis en image sur l'écran.</p>
+      <div class="key"><b>Relation clé fréquence ⇄ image :</b> plus la fréquence est <b>élevée</b>, meilleure est la <b>résolution</b>, mais moindre est la <b>pénétration</b> — et inversement.</div>
+
+      <h3>Composants de l'échographe</h3>
+      <ul>
+        <li><b>Console principale</b> : unité centrale (processeur, stockage) + clavier et boutons de réglage (gain, profondeur, zoom, Doppler, Freeze…).</li>
+        <li><b>Moniteur</b> : affichage de l'image en temps réel.</li>
+        <li><b>Sonde (transducteur)</b> : élément clé contenant les cristaux ; c'est <b>l'interface principale entre l'appareil et le patient</b>.</li>
+      </ul>
+
+      <h3>Boutons essentiels</h3>
+      <table>
+        <tr><th>Bouton</th><th>Fonction</th></tr>
+        <tr><td>Gain</td><td>Ajuste la luminosité globale de l'image</td></tr>
+        <tr><td>Profondeur (Depth)</td><td>Détermine la zone visualisée</td></tr>
+        <tr><td>Focus</td><td>Améliore la netteté à un point précis</td></tr>
+        <tr><td>Freeze</td><td>Fige l'image pour mesures ou captures</td></tr>
+        <tr><td>Power Doppler</td><td>Visualise le flux sanguin</td></tr>
+      </table>
+
+      <h3>Types de sondes</h3>
+      <table>
+        <tr><th>Sonde</th><th>Fréquence</th><th>Applications</th></tr>
+        <tr><td><b>Linéaire</b> (faisceau parallèle)</td><td>5–15 MHz</td><td>Muscles, tendons, vaisseaux, thyroïde, sein</td></tr>
+        <tr><td><b>Convexe</b> (faisceau divergent)</td><td>2–5 MHz</td><td>Abdomen, pelvis, obstétrique</td></tr>
+        <tr><td><b>Microconvexe</b></td><td>3–8 MHz</td><td>Pédiatrie, zones intercostales, néonatologie</td></tr>
+        <tr><td><b>Endocavitaire</b> (allongée)</td><td>5–9 MHz</td><td>Voie vaginale, endorectale</td></tr>
+        <tr><td><b>Sectorielle / Phased array</b> (éventail)</td><td>1–5 MHz</td><td>Cœur, échocardiographie, espace intercostal étroit</td></tr>
+      </table>
+
+      <h3>Les modes échographiques</h3>
+      <table>
+        <tr><th>Mode</th><th>Principe</th><th>Utilisation</th></tr>
+        <tr><td><b>Mode A</b> (Amplitude)</td><td>Écho affiché en pics sur une ligne</td><td>Surtout ophtalmologie</td></tr>
+        <tr><td><b>Mode B</b> (Brightness / bidimensionnel)</td><td>Chaque écho = point lumineux dont la brillance dépend de l'intensité</td><td><b>Mode standard</b> (foie, reins, utérus, fœtus…)</td></tr>
+        <tr><td><b>Mode M</b> (Mouvement)</td><td>Enregistre le mouvement d'un point dans le temps</td><td>Surtout cardiologie (valves, parois)</td></tr>
+        <tr><td><b>Mode Doppler</b></td><td>Effet Doppler : vitesse et direction du flux sanguin</td><td>Circulation artérielle et veineuse</td></tr>
+      </table>
+
+      <h3>Échogénicité — vocabulaire indispensable</h3>
+      <table>
+        <tr><th>Terme</th><th>Définition</th><th>Exemple</th></tr>
+        <tr><td><b>Échogène</b></td><td>Réfléchit les ultrasons → image grise</td><td>Foie, rate, muscle</td></tr>
+        <tr><td style="background:#111;color:#fff"><b>Anéchogène</b></td><td>Aucun écho → image <b>noire</b></td><td>Liquide pur (vessie pleine, kyste simple)</td></tr>
+        <tr><td><b>Hypoéchogène</b></td><td>Peu d'échos → plus sombre que l'environnement</td><td>Nodule bénin, fibrome</td></tr>
+        <tr><td style="background:#f2f2f2"><b>Hyperéchogène</b></td><td>Beaucoup d'échos → plus <b>blanc</b>, brillant</td><td>Calculs, stéatose</td></tr>
+        <tr><td><b>Isoéchogène</b></td><td>Même échogénicité que le tissu de référence</td><td>Difficile à distinguer sans repère</td></tr>
+      </table>
+
+      <h3>Gel échographique</h3>
+      <p>Substance visqueuse, transparente, <b>non grasse, non irritante, hydrosoluble et non allergénique</b>. Il assure la transmission des ultrasons entre la sonde et la peau. Indispensable pour : garantir une bonne transmission, <b>éviter les artéfacts liés à l'air</b>, améliorer la qualité d'image et le confort.</p>
+
+      <div class="grid2">
+        <div class="card good"><h4>✅ Avantages</h4>
+          <ul><li>Sans rayons X</li><li>Non invasive, indolore</li><li>Rapide, accessible, reproductible</li><li>Temps réel</li><li>Guide les gestes (ponctions, biopsies, drainages)</li><li>Portable (urgences, milieu rural)</li></ul>
+        </div>
+        <div class="card danger"><h4>⚠️ Limites</h4>
+          <ul><li>Fortement <b>opérateur-dépendant</b></li><li>Difficile chez le patient obèse</li><li>Gênée par les gaz intestinaux</li><li>Ne traverse <b>pas les os</b> ni les structures aérées (poumons, intestin plein d'air)</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2. ABDO ============ -->
+    <section id="abdo">
+      <h2><span class="tag" style="background:var(--abdo)">FICHE 2</span> Échographie abdominale</h2>
+      <p class="lead">Foie · vésicule biliaire · stéatose. Examen non invasif, non irradiant, très utile en urgence.</p>
+
+      <h3>Indications principales</h3>
+      <ul><li>Douleur abdominale · traumatisme abdominal</li><li>Suspicion d'ictère ou pathologie hépatobiliaire</li><li>Recherche d'ascite · troubles urinaires</li><li>Bilan d'organes : foie, rate, reins…</li></ul>
+
+      <h3>Matériel &amp; préparation</h3>
+      <div class="grid2">
+        <div class="card"><h4>Matériel</h4><ul><li>Sonde <b>convexe 3.5–5 MHz</b> (principale)</li><li>Sonde linéaire 7–12 MHz (structures superficielles)</li><li>Mode B + Doppler si nécessaire</li></ul></div>
+        <div class="card"><h4>Préparation du patient</h4><ul><li><b>À jeun 8 heures</b> avant l'examen</li><li>Position : décubitus dorsal (± latéral, assis, inspiration profonde)</li><li>Examen <b>systématique</b> pour ne rien oublier</li></ul></div>
+      </div>
+
+      <h3>Le foie</h3>
+      <table>
+        <tr><th>Paramètre</th><th>Normale</th></tr>
+        <tr><td>Position</td><td>Hypochondre droit + épigastre, sous la coupole diaphragmatique droite</td></tr>
+        <tr><td>Taille (axe crânio-caudal)</td><td><b>≤ 15 cm</b> — au-delà : <b>hépatomégalie</b></td></tr>
+        <tr><td>Échogénicité</td><td>Homogène, <b>&gt; rein</b> et <b>&lt; rate</b></td></tr>
+      </table>
+
+      <h3>Stéatose hépatique (foie gras)</h3>
+      <p>Accumulation anormale de graisse (triglycérides) dans les cellules du foie. <b>Souvent asymptomatique</b> ; parfois fatigue, pesanteur de l'hypochondre droit.</p>
+      <div class="key"><b>Signe échographique clé :</b> foie <b>hyperéchogène</b> — « plus blanc que le rein ». Gradations : absente → faible → modérée → sévère.</div>
+
+      <h3>Vésicule biliaire</h3>
+      <table>
+        <tr><th>Paramètre</th><th>Normale</th></tr>
+        <tr><td>Position</td><td>Face inférieure du foie</td></tr>
+        <tr><td>Paroi</td><td><b>&lt; 3 mm</b></td></tr>
+        <tr><td>Contenu</td><td><b>Anéchogène</b> (liquidien)</td></tr>
+      </table>
+    </section>
+
+    <!-- ============ 3. PELVIENNE ============ -->
+    <section id="pelv">
+      <h2><span class="tag" style="background:var(--pelv)">FICHE 3</span> Échographie pelvienne</h2>
+      <p class="lead">Voies d'abord · structures · fibrome · kyste ovarien · OMPK.</p>
+
+      <h3>Deux voies d'abord</h3>
+      <div class="grid2">
+        <div class="card"><h4>Voie sus-pubienne</h4><p><b>Vessie pleine indispensable</b> (elle fait « fenêtre acoustique »).</p></div>
+        <div class="card"><h4>Voie endovaginale</h4><p><b>Meilleure résolution</b>, surtout pour l'utérus et les ovaires.</p></div>
+      </div>
+
+      <h3>Structures visualisées</h3>
+      <p>Utérus · cavité endométriale · myomètre · col utérin · ovaires · <b>cul-de-sac de Douglas</b>.</p>
+
+      <h3>Pathologies fréquentes</h3>
+      <table>
+        <tr><th>Pathologie</th><th>Définition</th><th>Aspect échographique</th></tr>
+        <tr><td><b>Fibrome</b></td><td>Tumeur bénigne du myomètre, fréquente chez la femme en âge de procréer</td><td>Masse bien limitée, généralement <b>hypoéchogène</b>, parfois calcifications, déforme le myomètre/la cavité</td></tr>
+        <tr><td><b>Kyste ovarien</b></td><td>Poche remplie de liquide sur/dans un ovaire ; très fréquent, souvent bénin (fonctionnel)</td><td>Formation liquidienne <b>anéchogène</b> à parois fines</td></tr>
+        <tr><td><b>OMPK</b> (ovaires micropolykystiques)</td><td>Aspect échographique particulier des ovaires</td><td>Nombreux petits follicules <b>(2–9 mm)</b>, souvent en <b>périphérie</b> de l'ovaire</td></tr>
+      </table>
+    </section>
+
+    <!-- ============ 4. PRÉNATALE ============ -->
+    <section id="prenat">
+      <h2><span class="tag" style="background:var(--prenat)">FICHE 4</span> Surveillance prénatale</h2>
+      <p class="lead">Objectif : permettre l'accouchement d'un enfant sain sans compromettre la santé de la mère. Suivi <b>clinique, biologique et échographique</b>.</p>
+
+      <h3>Fréquence des visites prénatales</h3>
+      <table>
+        <tr><th>Période</th><th>Fréquence</th></tr>
+        <tr><td>Avant 28 SA</td><td>Chaque mois</td></tr>
+        <tr><td>Entre 28 et 36 SA</td><td>Toutes les 2–3 semaines</td></tr>
+        <tr><td>De 36 SA à l'accouchement</td><td>1 fois / semaine</td></tr>
+      </table>
+      <div class="key"><b>1<sup>re</sup> visite :</b> avant la fin du <b>3<sup>e</sup> mois</b> → confirmer la grossesse, préciser l'âge gestationnel (DDR et DPA, longueur cranio-caudale), rechercher les facteurs de risque.</div>
+
+      <h3>Signes de grossesse</h3>
+      <ul>
+        <li>Signe de <b>Chadwick</b> : hyperhémie (coloration bleutée) vaginale</li>
+        <li>Signe de <b>Hegar</b> : ramollissement du col</li>
+        <li>Mouvements fœtaux perçus entre <b>16 et 20 semaines</b></li>
+        <li>BDCF (bruits du cœur fœtal) : fœtoscope acoustique <b>18–20 SA</b> ; Doppler <b>~12 SA</b></li>
+      </ul>
+      <div class="card"><h4>Échographie précoce &amp; β-hCG</h4>
+        <ul><li>Voie <b>abdominale</b> : sac gestationnel visible à <b>5–6 SA</b> (β-hCG ≈ 5 000–6 000 mUI/mL)</li>
+        <li>Voie <b>endovaginale</b> : grossesse de <b>3–4 SA</b> (β-hCG ≈ 1 000–2 000 mUI/mL)</li>
+        <li>Permet d'écarter/confirmer une grossesse extra-utérine, molaire ou un avortement</li></ul>
+      </div>
+
+      <h3>Facteurs de risque de grossesse pathologique</h3>
+      <ul><li>Âge &lt; 15 ans ou &gt; 35 ans, IMC, contexte socio-économique</li>
+        <li>Tabac, alcool, drogues</li>
+        <li>Antécédents : HTA, diabète, néphropathie, VIH, hépatites B/C, fibrome, malformation utérine…</li>
+        <li>ATCD obstétricaux : HTA gravidique, diabète gestationnel, GEU, RCIU, macrosomie, prématurité</li></ul>
+
+      <h3>Bilan prénatal (visite initiale)</h3>
+      <ul><li>Groupe sanguin, facteur <b>Rhésus</b> · hémogramme complet</li>
+        <li>Sérologies : <b>rubéole, toxoplasmose, VIH, hépatite B</b></li>
+        <li>Dépistage : VDRL, gonocoques, chlamydia</li>
+        <li><b>TORCH</b> : Toxoplasmose, Rubéole, Cytomégalovirus, Herpes simplex, HIV</li>
+        <li>Protéinurie et glycosurie, bilan thyroïdien si symptomatique, dépistage T21</li></ul>
+
+      <h3>Paramètres surveillés à chaque visite</h3>
+      <p>Tension artérielle · poids · hauteur utérine · recherche d'albumine et de glucose dans les urines.</p>
+      <table>
+        <tr><th>Paramètre</th><th>Repère</th></tr>
+        <tr><td>Tension artérielle</td><td>Chute au 2<sup>e</sup> trimestre. Après 20 SA : ↑ systolique &gt; 30 mmHg ou ↑ diastolique &gt; 15 mmHg = suspicion d'HTA gravidique</td></tr>
+        <tr><td>Prise de poids totale</td><td>≈ <b>11–12 kg</b> (≈ 1 kg au T1, ≈ 5 kg aux T2 et T3)</td></tr>
+      </table>
+
+      <h3>Hauteur utérine (HU)</h3>
+      <table>
+        <tr><th>Repère anatomique</th><th>Âge gestationnel</th></tr>
+        <tr><td>Utérus au niveau de la symphyse</td><td>12 SA</td></tr>
+        <tr><td>Entre symphyse et ombilic</td><td>16 SA</td></tr>
+        <tr><td>Utérus au niveau de l'ombilic</td><td>20 SA</td></tr>
+      </table>
+
+      <h3>Liquide amniotique — Index de PHELAN (1987)</h3>
+      <p>Somme des plus grandes citernes verticales dans les 4 quadrants de l'utérus (par rapport à l'ombilic).</p>
+      <table>
+        <tr><th>Volume</th><th>Index amniotique</th></tr>
+        <tr><td><b>Oligoamnios</b></td><td>≤ 5 cm</td></tr>
+        <tr><td>Peu abondant</td><td>5,1 – 8 cm</td></tr>
+        <tr><td style="background:#eaf7f0"><b>Volume normal</b></td><td>8,1 – 18 cm</td></tr>
+        <tr><td>Excès</td><td>18,1 – 25 cm</td></tr>
+        <tr><td><b>Hydramnios</b></td><td>&gt; 25 cm</td></tr>
+      </table>
+      <div class="key"><b>Poly-hydramnios</b> peut signifier : diabète gestationnel mal contrôlé, malformation fœtale, infection (surtout virale) ou grossesse multiple.</div>
+
+      <h3>Dépistage de la trisomie 21</h3>
+      <ul>
+        <li><b>Clarté nucale</b> à l'échographie à <b>12 SA</b> (mesurée entre 11 et 14 SA). En France, seuil pathologique : <b>&gt; 3 mm</b>.</li>
+        <li><b>Triple test (14–17 SA)</b> : dosage de <b>Alpha-fœtoprotéine (AFP)</b>, <b>Estriol</b>, <b>β-hCG</b>.</li>
+        <li><b>Quadruple test (15–22 SA)</b> : triple test + <b>Inhibine</b>.</li>
+      </ul>
+      <table>
+        <tr><th>Condition</th><th>AFP</th><th>hCG</th><th>Estriol</th></tr>
+        <tr><td><b>Trisomie 21</b> (Down)</td><td>↓</td><td>↑</td><td>↓</td></tr>
+        <tr><td><b>Trisomie 18</b> (Edwards)</td><td>↓</td><td>↓</td><td>↓</td></tr>
+        <tr><td>Défaut du tube neural / paroi abdominale</td><td>↑</td><td>—</td><td>—</td></tr>
+      </table>
+      <div class="card"><h4>Marqueurs échographiques de T21</h4>
+        <ul><li>Clarté nucale : <b>augmentée</b></li><li>Os propres du nez : <b>absents</b></li><li>Doppler du ductus venosus : anormal (↑ index de pulsatilité)</li><li>Régurgitation de la valve tricuspide : présente</li></ul>
+      </div>
+      <div class="key"><b>AFP :</b> ↑ dans les défauts du tube neural (anencéphalie, spina bifida), les malformations de la paroi (gastroschisis, omphalocèle), la mort fœtale et la grossesse multiple ; ↓ dans les trisomies 21 et 18.</div>
+
+      <h3>Amniocentèse</h3>
+      <p>Méthode <b>invasive</b> : prélèvement de liquide amniotique pour analyser les chromosomes fœtaux, possible dès la <b>13<sup>e</sup>–14<sup>e</sup> SA</b>, sous contrôle échographique (aiguille fine calibre 20–22, ~30 mL).</p>
+      <ul><li>Indications : anomalie suspectée à l'écho, AFP anormale, ATCD familiaux, gestante &gt; 35 ans, contrôle de maturité pulmonaire</li>
+        <li>Risques : douleurs/crampes, spotting, amniotite (&lt; 1/1 000), <b>taux de perte fœtale ≤ 0,5 %</b></li></ul>
+    </section>
+
+    <!-- ============ 5. SIÈGE ============ -->
+    <section id="siege">
+      <h2><span class="tag" style="background:var(--siege)">FICHE 5</span> La présentation en siège</h2>
+      <p class="lead">Position fœtale où les fesses ou les pieds se présentent en premier, au lieu de la tête (présentation podalique).</p>
+
+      <div class="key"><b>Prévalence :</b> <b>3–4 %</b> des grossesses <b>à terme</b> (≥ 37 SA), mais <b>20–25 % à 28 SA</b> — la fréquence diminue car le fœtus se retourne en position céphalique avant la naissance.</div>
+
+      <h3>Rappel : types de présentations fœtales</h3>
+      <ul>
+        <li><b>Céphalique</b> (tête en bas — la plus courante et favorable) : vertex, face, front</li>
+        <li><b>Siège</b> (fesses/pieds en premier)</li>
+        <li><b>Transverse / oblique</b> : accouchement vaginal impossible sans intervention (VME ou césarienne)</li>
+      </ul>
+
+      <h3>Les 3 types de siège</h3>
+      <table>
+        <tr><th>Type</th><th>Description</th></tr>
+        <tr><td><b>Siège complet</b></td><td>Fesses en bas, jambes repliées (genoux fléchis, pieds près des fesses)</td></tr>
+        <tr><td><b>Siège décomplété (ou franc)</b></td><td>Fesses en bas, jambes étendues vers le haut (pieds près de la tête)</td></tr>
+        <tr><td><b>Siège pieds (podalique)</b></td><td>Un ou les deux pieds se présentent en premier</td></tr>
+      </table>
+
+      <h3>Facteurs de risque</h3>
+      <ul>
+        <li>Grossesse <b>multiple</b> (gémellaire)</li>
+        <li><b>Prématurité</b> (pas encore eu le temps de se retourner)</li>
+        <li><b>Polyhydramnios / oligoamnios</b></li>
+        <li>Anomalies utérines (fibromes, forme anormale), <b>placenta praevia</b></li>
+        <li><b>Macrosomie</b> fœtale, <b>multiparité</b> (laxité musculaire)</li>
+        <li>Anomalies fœtales, antécédent de présentation en siège</li>
+      </ul>
+
+      <h3>Diagnostic</h3>
+      <p><b>Examen clinique</b> (palpation abdominale, toucher vaginal) + <b>échographie</b> (confirme la position et évalue les paramètres fœtaux : liquide amniotique, anomalies…).</p>
+
+      <h3>Complications</h3>
+      <div class="grid2">
+        <div class="card danger"><h4>Pour le bébé</h4>
+          <ul><li><b>Procidence / prolapsus du cordon</b> ombilical</li><li>Hypoxie et asphyxie</li><li>Traumatismes (fractures, luxation de hanche, lésions nerveuses)</li><li><b>Dystocie des épaules</b></li><li>Décès périnatal (risque ↑)</li></ul></div>
+        <div class="card danger"><h4>Pour la mère</h4>
+          <ul><li>Travail prolongé et difficile</li><li>Recours à la <b>césarienne</b></li><li>Hémorragie du post-partum</li><li>Déchirures périnéales / épisiotomie</li><li>Infections</li></ul></div>
+      </div>
+
+      <h3>Prise en charge</h3>
+      <table>
+        <tr><th>Option</th><th>Points clés</th></tr>
+        <tr><td><b>VME</b> (version céphalique externe)</td><td>Tentative de retourner le bébé en appuyant sur l'abdomen. Réalisée vers <b>36–37 SA</b>, sous surveillance écho + cardiotocographique. <b>CI :</b> placenta praevia, oligoamnios, anomalies fœtales majeures.</td></tr>
+        <tr><td><b>Accouchement voie basse</b></td><td>Possible si bassin adéquat, poids fœtal estimé adéquat, absence d'anomalies. Surveillance étroite + obstétricien expérimenté.</td></tr>
+        <tr><td><b>Césarienne programmée</b></td><td>Souvent recommandée pour réduire les risques. Planifiée vers <b>39 SA</b>. Indiquée si conditions défavorables (siège pieds, faible poids, prématurité…).</td></tr>
+      </table>
+      <div class="good"><b>Pendant le travail :</b> monitoring cardiotocographique continu (fréquence cardiaque fœtale + contractions), évaluation régulière de la descente et de la dilatation, préparation à une césarienne en urgence si complications.</div>
+    </section>
+
+    <!-- ============ MÉMO ============ -->
+    <section id="memo">
+      <h2>🎯 Points clés à retenir (mémo express)</h2>
+      <p class="lead">Les chiffres et associations les plus « tombables » en QCM.</p>
+      <table>
+        <tr><th>Thème</th><th>À mémoriser absolument</th></tr>
+        <tr><td>Ultrasons</td><td>&gt; 20 kHz · fréquence ↑ → résolution ↑ mais pénétration ↓</td></tr>
+        <tr><td>Sonde obstétricale/abdo</td><td><b>Convexe 2–5 MHz</b> · endocavitaire 5–9 MHz · cardiaque = sectorielle</td></tr>
+        <tr><td>Anéchogène</td><td>= <b>noir</b> = liquide pur (vessie, kyste). Hyperéchogène = blanc = calculs/stéatose</td></tr>
+        <tr><td>Foie normal</td><td>≤ 15 cm · échogénicité &gt; rein, &lt; rate</td></tr>
+        <tr><td>Vésicule</td><td>Paroi &lt; 3 mm · contenu anéchogène · à jeun 8 h</td></tr>
+        <tr><td>OMPK</td><td>Follicules 2–9 mm en périphérie</td></tr>
+        <tr><td>Hauteur utérine</td><td>Symphyse = 12 SA · symphyse-ombilic = 16 SA · ombilic = 20 SA</td></tr>
+        <tr><td>Phelan normal</td><td>8–18 cm · oligoamnios ≤ 5 · hydramnios &gt; 25</td></tr>
+        <tr><td>Clarté nucale (France)</td><td>Pathologique si &gt; 3 mm · mesurée à 12 SA</td></tr>
+        <tr><td>Marqueurs Down (T21)</td><td>AFP ↓ · <b>hCG ↑</b> · Estriol ↓</td></tr>
+        <tr><td>Siège à terme</td><td>3–4 % (vs 20–25 % à 28 SA)</td></tr>
+        <tr><td>VME</td><td>36–37 SA · CI : placenta praevia, oligoamnios</td></tr>
+        <tr><td>Césarienne programmée siège</td><td>~39 SA</td></tr>
+      </table>
+      <div class="toolbar">
+        <a class="btn" href="quiz.html">📝 Tester mes connaissances</a>
+        <button class="btn ghost" onclick="window.print()">🖨️ Imprimer</button>
+      </div>
+    </section>
+
+    <footer>Fiches de révision générées pour la préparation aux examens · Échographie &amp; Obstétrique.<br>Support pédagogique — à confronter aux référentiels officiels et à l'enseignement de vos professeurs.</footer>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" title="Haut de page">↑</button>
+<script>
+  const bt=document.getElementById('backtop');
+  addEventListener('scroll',()=>{bt.style.display=scrollY>400?'block':'none'});
+  bt.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+</script>
+</body>
+</html>
