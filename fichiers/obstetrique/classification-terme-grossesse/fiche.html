@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classification selon le terme</title>
+</head>
+<body>
+<title>Classification selon le terme</title>
+<style>
+  /* ---------- Tokens : clair (repris de fiches-revision.html) ---------- */
+  :root{
+    --bg:#f4f6fb;
+    --panel:#ffffff;
+    --panel-2:#f9fafd;
+    --ink:#161d2b;
+    --ink-soft:#3a4557;
+    --muted:#5f6c85;
+    --line:#e1e6f0;
+    --line-soft:#eef1f7;
+    --brand:#20558f;
+    --brand-soft:#e7eff8;
+    --avo:#6d7285;
+    --pre:#b5432c;
+    --ter:#1f7355;
+    --post:#9a7112;
+    --avo-bg:#eff0f4;
+    --pre-bg:#fbeae6;
+    --ter-bg:#e6f2ec;
+    --post-bg:#faf1dd;
+    --key:#8a6a00;
+    --key-bg:#fdf6e3;
+    --shadow:0 1px 2px rgba(22,29,43,.05), 0 8px 24px rgba(22,29,43,.06);
+    --radius:12px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10141d;
+      --panel:#171d29;
+      --panel-2:#1b2230;
+      --ink:#e8edf7;
+      --ink-soft:#c2cbdb;
+      --muted:#8d9ab2;
+      --line:#28303f;
+      --line-soft:#212836;
+      --brand:#79aee6;
+      --brand-soft:#1b2a3b;
+      --avo:#a2a8bb;
+      --pre:#e8836a;
+      --ter:#5ec298;
+      --post:#dcb04c;
+      --avo-bg:#232735;
+      --pre-bg:#2e1e1a;
+      --ter-bg:#152d24;
+      --post-bg:#2c2413;
+      --key:#d8b551;
+      --key-bg:#26210f;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10141d;
+    --panel:#171d29;
+    --panel-2:#1b2230;
+    --ink:#e8edf7;
+    --ink-soft:#c2cbdb;
+    --muted:#8d9ab2;
+    --line:#28303f;
+    --line-soft:#212836;
+    --brand:#79aee6;
+    --brand-soft:#1b2a3b;
+    --avo:#a2a8bb;
+    --pre:#e8836a;
+    --ter:#5ec298;
+    --post:#dcb04c;
+    --avo-bg:#232735;
+    --pre-bg:#2e1e1a;
+    --ter-bg:#152d24;
+    --post-bg:#2c2413;
+    --key:#d8b551;
+    --key-bg:#26210f;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Segoe UI",Roboto,-apple-system,Helvetica,Arial,sans-serif;
+    line-height:1.62;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *{transition:none !important; animation:none !important}
+  }
+
+  .wrap{display:grid;grid-template-columns:250px minmax(0,1fr);max-width:1180px;margin:0 auto;gap:0}
+  nav.toc{
+    position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+    background:var(--panel);border-right:1px solid var(--line);padding:24px 16px;
+  }
+  main{padding:32px 40px 90px;min-width:0;display:flex;flex-direction:column;gap:20px}
+
+  .toc .brand{font-size:.95rem;font-weight:700;line-height:1.3;margin:0 0 3px}
+  .toc .brand small{display:block;font-weight:400;font-size:.74rem;color:var(--muted);margin-top:4px;letter-spacing:.04em;text-transform:uppercase}
+  .toc hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+  .toc h4{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:16px 0 6px}
+  .toc a{
+    display:block;padding:6px 10px;border-radius:8px;color:var(--ink-soft);
+    font-size:.875rem;text-decoration:none;border-left:3px solid transparent;transition:.15s
+  }
+  .toc a:hover{background:var(--brand-soft);color:var(--ink)}
+  .toc a:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  .toc a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle}
+
+  section{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 30px;box-shadow:var(--shadow);scroll-margin-top:16px
+  }
+  section > h2{margin:0 0 4px;font-size:1.32rem;letter-spacing:-.01em;text-wrap:balance}
+  section > .lead{color:var(--muted);margin:0 0 18px;font-size:.92rem}
+  h3{margin:24px 0 8px;font-size:1.03rem;letter-spacing:-.005em}
+  h3:first-of-type{margin-top:4px}
+  h4{margin:16px 0 6px;font-size:.9rem;color:var(--ink-soft)}
+  p{margin:8px 0}
+  ul,ol{margin:6px 0 12px;padding-left:20px}
+  li{margin:3px 0}
+  b,strong{color:var(--ink)}
+  code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.87em;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:1px 5px
+  }
+  .eyebrow{
+    font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+    color:var(--brand);margin:0 0 6px
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:30px 32px 26px;box-shadow:var(--shadow)
+  }
+  .hero h1{margin:0 0 8px;font-size:2rem;line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
+  .hero .sub{margin:0;color:var(--muted);max-width:62ch;font-size:.98rem}
+  .hero .verbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .hero .verbs span{
+    font-size:.78rem;font-weight:700;letter-spacing:.09em;padding:5px 13px;border-radius:20px;
+    background:var(--brand-soft);color:var(--brand);border:1px solid var(--line)
+  }
+
+  /* ---------- La règle des SA ---------- */
+  .ruler{margin-top:26px;padding-top:6px}
+  .ruler-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+  .ruler-scroll{overflow-x:auto;padding-bottom:6px}
+  .ruler-inner{min-width:600px}
+  .bands{display:flex;height:44px;border-radius:6px;overflow:hidden}
+  .band{display:flex;align-items:center;justify-content:center;color:#fff;font-size:.73rem;font-weight:700;letter-spacing:.04em;padding:0 4px;text-align:center;line-height:1.15}
+  .band.avo{background:var(--avo);flex:22}
+  .band.pre{background:var(--pre);flex:15}
+  .band.ter{background:var(--ter);flex:5}
+  .band.post{background:var(--post);flex:4}
+  .ticks{position:relative;height:34px;margin-top:2px}
+  .tick{position:absolute;top:0;transform:translateX(-50%);text-align:center}
+  .tick i{display:block;width:2px;height:9px;background:var(--ink-soft);margin:0 auto 3px}
+  .tick b{font-size:.9rem;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .tick s{display:block;text-decoration:none;font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .sub-bands{display:flex;align-items:flex-start;margin-top:12px;gap:3px;font-size:.66rem;text-align:center;line-height:1.35}
+  .sub-bands div{padding:5px 4px;border-radius:4px;color:var(--ink-soft);background:var(--panel-2);border:1px solid var(--line-soft)}
+
+  /* ---------- Piliers ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px}
+  .pillar{border:1px solid var(--line);border-radius:10px;padding:18px 18px 16px;background:var(--panel-2)}
+  .pillar .num{
+    display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
+    border-radius:50%;font-size:.82rem;font-weight:700;color:#fff;margin-bottom:10px
+  }
+  .pillar h3{margin:0 0 6px;font-size:1.02rem;letter-spacing:.02em}
+  .pillar p{margin:0;font-size:.88rem;color:var(--muted)}
+  .pillar .why{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:.83rem;font-style:italic;color:var(--ink-soft)}
+
+  /* ---------- Tableaux ---------- */
+  .tw{overflow-x:auto;margin:12px 0 4px}
+  table{width:100%;border-collapse:collapse;font-size:.89rem;min-width:520px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--brand-soft);font-weight:700;color:var(--ink);font-size:.84rem}
+  tbody tr:nth-child(even) td{background:var(--panel-2)}
+  td.num,th.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  /* ---------- Encadrés ---------- */
+  .note{border-left:4px solid var(--brand);background:var(--brand-soft);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0;font-size:.9rem}
+  .key{border-left:4px solid var(--key);background:var(--key-bg);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0;font-size:.9rem}
+  .key b:first-child{color:var(--key)}
+  .trap{border-left:4px solid var(--pre);background:var(--pre-bg);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0;font-size:.9rem}
+  .trap b:first-child{color:var(--pre)}
+  .good{border-left:4px solid var(--ter);background:var(--ter-bg);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0;font-size:.9rem}
+  .good b:first-child{color:var(--ter)}
+
+  /* ---------- Formule ---------- */
+  .formula{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:18px 20px;text-align:center;margin:14px 0
+  }
+  .formula b{font-size:1.22rem;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+  .formula small{display:block;color:var(--muted);margin-top:6px;font-size:.8rem}
+
+  /* ---------- Cartes catégories ---------- */
+  .cat{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0}
+  .cat > header{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;padding:12px 18px;color:#fff}
+  .cat > header h3{margin:0;color:#fff;font-size:1.02rem}
+  .cat > header .range{font-size:.95rem;font-weight:700;font-variant-numeric:tabular-nums;opacity:.95}
+  .cat > header .freq{margin-left:auto;font-size:.78rem;opacity:.9}
+  .cat > div{padding:14px 18px;background:var(--panel)}
+  .cat.avo > header{background:var(--avo)} .cat.pre > header{background:var(--pre)}
+  .cat.ter > header{background:var(--ter)} .cat.post > header{background:var(--post)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .stack{display:flex;flex-direction:column;gap:6px}
+  .row-item{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line-soft)}
+  .row-item:last-child{border-bottom:0}
+  .row-item .tag{
+    flex:0 0 118px;font-size:.78rem;font-weight:700;color:#fff;background:var(--pre);
+    padding:3px 9px;border-radius:5px;text-align:center
+  }
+  .row-item p{margin:0;font-size:.87rem;color:var(--ink-soft)}
+
+  /* ---------- Étapes ---------- */
+  ol.steps{list-style:none;padding:0;margin:12px 0;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+  ol.steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start}
+  ol.steps li::before{
+    content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;
+    font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px
+  }
+  ol.steps b{display:block;font-size:.94rem}
+  ol.steps span{font-size:.87rem;color:var(--muted)}
+
+  /* ---------- Auto-test ---------- */
+  details{border:1px solid var(--line);border-radius:9px;background:var(--panel-2);margin:8px 0}
+  details[open]{background:var(--panel)}
+  summary{padding:11px 15px;cursor:pointer;font-weight:600;font-size:.92rem;list-style:none;display:flex;gap:10px;align-items:flex-start}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"?";flex:0 0 20px;height:20px;border-radius:50%;background:var(--brand-soft);color:var(--brand);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  summary:focus-visible{outline:2px solid var(--brand);outline-offset:-2px;border-radius:9px}
+  details > div{padding:0 15px 13px 45px;font-size:.89rem;color:var(--ink-soft)}
+
+  footer.page{color:var(--muted);font-size:.78rem;padding:6px 2px 0;line-height:1.7}
+
+  @media(max-width:900px){
+    .wrap{grid-template-columns:1fr}
+    nav.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+    main{padding:22px 18px 60px}
+    .pillars,.grid2{grid-template-columns:1fr}
+    .row-item{flex-direction:column;gap:5px}
+    .row-item .tag{flex:none;align-self:flex-start}
+  }
+</style>
+
+<div class="wrap">
+<nav class="toc">
+  <p class="brand">Classification selon le terme<small>Obstétrique · exposé</small></p>
+  <hr>
+  <h4>Le sujet</h4>
+  <a href="#intro">Pourquoi classer ?</a>
+  <a href="#piliers">Les trois temps</a>
+  <h4>1 · Dater</h4>
+  <a href="#sa">SA, SG et durée</a>
+  <a href="#naegele">Règle de Naegele</a>
+  <a href="#echo">Échographie</a>
+  <a href="#reperes">Repères cliniques</a>
+  <h4>2 · Classer</h4>
+  <a href="#avortement"><span class="dot" style="background:var(--avo)"></span>Avortement</a>
+  <a href="#premature"><span class="dot" style="background:var(--pre)"></span>Prématurité</a>
+  <a href="#aterme"><span class="dot" style="background:var(--ter)"></span>À terme</a>
+  <a href="#postterme"><span class="dot" style="background:var(--post)"></span>Post-terme</a>
+  <a href="#synthese">Tableau de synthèse</a>
+  <a href="#poids">Terme ≠ poids</a>
+  <h4>3 · Agir</h4>
+  <a href="#map">Menace d'accouchement prématuré</a>
+  <a href="#cat-terme">À terme et au-delà</a>
+  <h4>Réviser</h4>
+  <a href="#autotest">Auto-test</a>
+  <a href="#pieges">Les 8 pièges</a>
+</nav>
+
+<main>
+
+  <div class="hero">
+    <p class="eyebrow">Obstétrique · exposé</p>
+    <h1>Classification de la grossesse selon le terme</h1>
+    <p class="sub">Une date n'est jamais une simple date : c'est un pronostic et une ordonnance. Savoir qu'une patiente est à 33 SA plutôt qu'à 38 SA change la maternité où elle accouchera, les médicaments qu'elle recevra, et le devenir de son enfant.</p>
+    <div class="verbs"><span>DATER</span><span>CLASSER</span><span>AGIR</span></div>
+
+    <div class="ruler">
+      <p class="ruler-label">La frise du terme — en semaines d'aménorrhée</p>
+      <div class="ruler-scroll"><div class="ruler-inner">
+        <div class="bands">
+          <div class="band avo">AVORTEMENT</div>
+          <div class="band pre">PRÉMATURÉ</div>
+          <div class="band ter">À TERME</div>
+          <div class="band post">POST-TERME</div>
+        </div>
+        <div class="ticks">
+          <div class="tick" style="left:47.8%"><i></i><b>22</b><s>viabilité</s></div>
+          <div class="tick" style="left:80.4%"><i></i><b>37</b><s>terme</s></div>
+          <div class="tick" style="left:91.3%"><i></i><b>42</b><s>dépassé</s></div>
+        </div>
+        <div class="sub-bands">
+          <div style="flex:22">non viable · ou &lt; 500 g</div>
+          <div style="flex:15">extrême &lt; 28 · grande 28–31 · modérée 32–33 · <b>tardive 34–36 = 70 %</b></div>
+          <div style="flex:5">précoce 37–38 · <b>plein 39–40</b> · tardif 41</div>
+          <div style="flex:4">294 jours</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ============ INTRO ============ -->
+  <section id="intro">
+    <h2>Pourquoi classer selon le terme ?</h2>
+    <p class="lead">Ce n'est pas un exercice de vocabulaire : chaque borne est une frontière de décision.</p>
+    <p>Classer une grossesse selon le terme, c'est répondre à une seule question : <b>à quel âge gestationnel en sommes-nous — et donc, qu'est-ce que je risque et que dois-je faire ?</b></p>
+    <p>Chacune des trois bornes — <b>22 SA</b>, <b>37 SA</b>, <b>42 SA</b> — change le pronostic du fœtus, le lieu d'accouchement, les médicaments à administrer et le moment où il faut déclencher le travail.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Repère</th><th class="num">Chiffre</th><th>Ce qu'il signifie</th></tr></thead>
+      <tbody>
+        <tr><td>Prématurité</td><td class="num">7 – 10 %</td><td>des naissances — 1<sup>re</sup> cause de morbi-mortalité néonatale</td></tr>
+        <tr><td>Grossesse prolongée</td><td class="num">15 – 20 %</td><td>des grossesses dépassent 41 SA</td></tr>
+        <tr><td>Terme dépassé</td><td class="num">≈ 1 %</td><td>des grossesses atteignent 42 SA</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ============ PILIERS ============ -->
+  <section id="piliers">
+    <h2>Les trois temps du sujet</h2>
+    <p class="lead">C'est aussi le plan de l'exposé : trois verbes, dans cet ordre.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="num" style="background:var(--brand)">1</span>
+        <h3>DATER</h3>
+        <p>Établir l'âge gestationnel exact : SA vs SG, règle de Naegele, échographie du 1<sup>er</sup> trimestre, repères cliniques.</p>
+        <p class="why">Sans datation fiable, toute classification est fausse.</p>
+      </div>
+      <div class="pillar">
+        <span class="num" style="background:var(--pre)">2</span>
+        <h3>CLASSER</h3>
+        <p>Placer la grossesse dans l'une des quatre catégories : avortement, prématuré, à terme, post-terme.</p>
+        <p class="why">Trois bornes suffisent : 22 — 37 — 42 SA.</p>
+      </div>
+      <div class="pillar">
+        <span class="num" style="background:var(--ter)">3</span>
+        <h3>AGIR</h3>
+        <p>Déduire les risques et la conduite à tenir : corticoïdes, tocolyse, transfert, surveillance, déclenchement.</p>
+        <p class="why">Une date n'est pas une date : c'est une ordonnance.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 1 · DATER ============ -->
+  <section id="sa">
+    <p class="eyebrow">1 · Dater</p>
+    <h2>Deux compteurs à ne jamais confondre</h2>
+
+    <div class="grid2">
+      <div>
+        <h3>SA — semaines d'aménorrhée</h3>
+        <p>On compte à partir du <b>1<sup>er</sup> jour des dernières règles (DDR)</b>. C'est le compteur utilisé en clinique — toujours.</p>
+      </div>
+      <div>
+        <h3>SG — semaines de grossesse</h3>
+        <p>On compte à partir de la <b>fécondation</b>, qui survient environ 2 semaines après la DDR.</p>
+      </div>
+    </div>
+
+    <div class="formula"><b>SA = SG + 2 semaines</b><small>On écrit toujours l'âge gestationnel en semaines + jours : 34 SA + 5 j</small></div>
+
+    <h3>Durée normale de la grossesse</h3>
+    <div class="tw"><table>
+      <tbody>
+        <tr><td class="num"><b>280 jours</b></td><td>à partir de la DDR</td></tr>
+        <tr><td class="num"><b>40 semaines</b></td><td>soit 9 mois calendaires</td></tr>
+        <tr><td class="num"><b>266 jours</b></td><td>à partir de la conception (38 semaines)</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><b>Piège n°1.</b> Confondre SA et SG décale tout le raisonnement de deux semaines — donc de catégorie.</div>
+  </section>
+
+  <section id="naegele">
+    <p class="eyebrow">1 · Dater</p>
+    <h2>Calculer la date prévue d'accouchement</h2>
+
+    <div class="formula">
+      <b>DPA = DDR − 3 mois + 7 jours ( + 1 an )</b>
+      <small>Règle de Naegele — formulation équivalente : DDR + 14 jours + 9 mois</small>
+    </div>
+
+    <h3>Exemple</h3>
+    <p>DDR = 10 mars 2025 → −3 mois = 10 décembre → +7 jours → <b>DPA = 17 décembre 2025</b>.</p>
+
+    <h3>Conditions de validité</h3>
+    <ul>
+      <li>Cycles <b>réguliers de 28 jours</b></li>
+      <li>DDR connue avec certitude</li>
+      <li>Pas de contraception hormonale dans les 3 mois précédents</li>
+      <li>Pas d'allaitement en cours</li>
+    </ul>
+    <div class="note">Si un seul de ces critères manque, la DDR n'est pas fiable : on date à l'échographie.</div>
+
+    <div class="key"><b>Nuance de convention.</b> La règle de Naegele place la DPA à <b>40 SA</b>. La convention française (ECN) fixe le « terme » à <b>41 SA</b>. À retenir : <b>DPA ≈ 40 SA · surveillance renforcée dès 41 SA · terme dépassé à 42 SA</b>.</div>
+  </section>
+
+  <section id="echo">
+    <p class="eyebrow">1 · Dater</p>
+    <h2>L'échographie : la méthode de référence</h2>
+    <div class="tw"><table>
+      <thead><tr><th class="num">Période</th><th>Mesure</th><th class="num">Précision</th></tr></thead>
+      <tbody>
+        <tr><td class="num"><b>11 – 14 SA</b> (T1)</td><td><b>LCC</b> — longueur cranio-caudale</td><td class="num"><b>± 3 à 5 jours</b></td></tr>
+        <tr><td class="num">14 – 22 SA (T2)</td><td>BIP, périmètre céphalique, fémur</td><td class="num">± 7 à 10 jours</td></tr>
+        <tr><td class="num">&gt; 22 SA (T3)</td><td>Biométries de croissance</td><td class="num">± 2 à 3 semaines</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="good"><b>Règle d'or.</b> Plus l'échographie est précoce, plus elle est précise. Au 3<sup>e</sup> trimestre on évalue la <b>croissance</b> — jamais l'<b>âge</b>.</div>
+
+    <h3>Échographie ou DDR ?</h3>
+    <ul>
+      <li>Écart écho T1 / DDR <b>≤ 5–7 jours</b> → on garde la DDR</li>
+      <li>Écart <b>&gt; 5–7 jours</b> → on <b>recale le terme sur l'échographie</b></li>
+      <li>DDR incertaine ou cycles irréguliers → échographie d'emblée</li>
+    </ul>
+    <div class="note">Le terme, une fois fixé, n'est plus modifié de toute la grossesse.</div>
+  </section>
+
+  <section id="reperes">
+    <p class="eyebrow">1 · Dater</p>
+    <h2>Les repères cliniques</h2>
+    <p class="lead">Utiles lorsque la DDR est inconnue et l'échographie indisponible — situation fréquente en pratique.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Repère</th><th>Valeur</th></tr></thead>
+      <tbody>
+        <tr><td><b>Hauteur utérine</b></td><td><code>HU (cm) ≈ terme (SA) − 4</code>, valable de 20 à 32 SA</td></tr>
+        <tr><td><b>Palpation utérine</b></td><td>Symphyse ≈ 12 SA · entre symphyse et ombilic ≈ 16 SA · ombilic ≈ 20 SA</td></tr>
+        <tr><td><b>Mouvements actifs fœtaux</b></td><td>16 – 20 SA (plus tôt chez la multipare)</td></tr>
+        <tr><td><b>Bruits du cœur fœtaux</b></td><td>Doppler dès 12 SA · stéthoscope de Pinard vers 20 SA</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Signes cliniques précoces de grossesse</h3>
+    <p>Aménorrhée · nausées, hypersialorrhée · <b>signe de Hegar</b> (ramollissement de l'isthme) · <b>signe de Chadwick</b> (hyperhémie vaginale bleutée) · augmentation du volume utérin dès 6 SA · β-hCG positifs.</p>
+  </section>
+
+  <!-- ============ 2 · CLASSER ============ -->
+  <section id="avortement">
+    <p class="eyebrow">2 · Classer — catégorie 1</p>
+    <h2>Avortement</h2>
+    <div class="cat avo">
+      <header><h3>Avortement / fausse couche</h3><span class="range">&lt; 22 SA</span><span class="freq">ou poids &lt; 500 g</span></header>
+      <div>
+        <p><b>Définition OMS.</b> Interruption de la grossesse avant <b>22 SA révolues</b> ou pour un poids fœtal <b>&lt; 500 g</b>. Le produit n'est pas viable : on parle d'<b>avortement</b>, jamais d'accouchement.</p>
+        <div class="grid2">
+          <div>
+            <h4>Avortement précoce — &lt; 14 SA</h4>
+            <p>Le plus fréquent (≈ 80 %). Cause principale : <b>anomalies chromosomiques</b>.</p>
+          </div>
+          <div>
+            <h4>Avortement tardif — 14 → 22 SA</h4>
+            <p>Évoquer : <b>béance cervico-isthmique</b>, malformation utérine, infection, syndrome des antiphospholipides.</p>
+          </div>
+        </div>
+        <div class="note"><b>Limite de viabilité.</b> La réanimation néonatale n'est en général pas entreprise avant <b>24 SA</b>. Entre 22 et 24 SA : « zone grise », décision discutée au cas par cas avec les parents.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="premature">
+    <p class="eyebrow">2 · Classer — catégorie 2</p>
+    <h2>Prématurité</h2>
+    <div class="cat pre">
+      <header><h3>Prématuré</h3><span class="range">22 SA → 36 SA + 6 j</span><span class="freq">7 – 10 % des naissances</span></header>
+      <div>
+        <p><b>Définition.</b> Naissance d'un enfant <b>vivant</b> entre 22 SA et 37 SA révolues. C'est la <b>1<sup>re</sup> cause de morbi-mortalité néonatale</b>.</p>
+
+        <h4>Sous-classification (OMS)</h4>
+        <div class="tw"><table>
+          <thead><tr><th>Sous-catégorie</th><th class="num">Âge gestationnel</th><th>Remarque</th></tr></thead>
+          <tbody>
+            <tr><td><b>Prématurité extrême</b></td><td class="num">&lt; 28 SA</td><td>Pronostic le plus sombre</td></tr>
+            <tr><td><b>Grande prématurité</b></td><td class="num">28 – 31 SA + 6 j</td><td>Souvent notée « &lt; 32 SA »</td></tr>
+            <tr><td><b>Prématurité modérée</b></td><td class="num">32 – 33 SA + 6 j</td><td></td></tr>
+            <tr><td><b>Prématurité tardive</b></td><td class="num">34 – 36 SA + 6 j</td><td><b>≈ 70 % des prématurés</b> — faussement rassurante</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="grid2">
+          <div>
+            <h4>Deux mécanismes</h4>
+            <ul>
+              <li><b>Spontanée — 70 %</b> : travail prématuré, rupture prématurée des membranes (RPM)</li>
+              <li><b>Induite — 30 %</b> : extraction médicalement décidée (pré-éclampsie, RCIU sévère, hématome rétroplacentaire, souffrance fœtale, diabète déséquilibré)</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Facteurs de risque</h4>
+            <ul>
+              <li><b>Antécédent d'accouchement prématuré</b> — le plus prédictif</li>
+              <li>Grossesse multiple · hydramnios · placenta prævia</li>
+              <li>Infections : chorio-amniotite, urinaire, vaginose</li>
+              <li>Béance cervico-isthmique · malformation utérine</li>
+              <li>Âge &lt; 18 ou &gt; 35 ans · tabac · travail pénible</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="aterme">
+    <p class="eyebrow">2 · Classer — catégorie 3</p>
+    <h2>Grossesse à terme</h2>
+    <div class="cat ter">
+      <header><h3>À terme</h3><span class="range">37 SA + 0 j → 41 SA + 6 j</span><span class="freq">morbi-mortalité minimale</span></header>
+      <div>
+        <p>Depuis 2013, l'<b>ACOG</b> a abandonné le mot unique « à terme » au profit de trois sous-périodes.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Terme</th><th class="num">Âge gestationnel</th><th>Message clé</th></tr></thead>
+          <tbody>
+            <tr><td><b>Terme précoce</b> <i>(early term)</i></td><td class="num">37+0 → 38+6</td><td>Morbidité respiratoire néonatale <b>encore augmentée</b></td></tr>
+            <tr><td><b>Terme plein</b> <i>(full term)</i></td><td class="num">39+0 → 40+6</td><td><b>Fenêtre idéale</b> : risque minimal</td></tr>
+            <tr><td><b>Terme tardif</b> <i>(late term)</i></td><td class="num">41+0 → 41+6</td><td>Les risques remontent : surveillance à instaurer</td></tr>
+          </tbody>
+        </table></div>
+        <div class="trap"><b>Conséquence pratique majeure.</b> Aucune césarienne ni aucun déclenchement <b>de convenance</b> ne doit être programmé <b>avant 39 SA</b>. C'est exactement pour cela que la subdivision existe.</div>
+        <div class="note"><b>Accouchement normal (eutocique)</b> = à terme (≥ 37 SA) + spontané + voie basse + présentation du sommet + enfant en bonne santé (score d'Apgar satisfaisant).</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="postterme">
+    <p class="eyebrow">2 · Classer — catégorie 4</p>
+    <h2>Grossesse prolongée et terme dépassé</h2>
+    <div class="cat post">
+      <header><h3>Post-terme</h3><span class="range">≥ 42 SA</span><span class="freq">≈ 1 % des grossesses</span></header>
+      <div>
+        <div class="tw"><table>
+          <thead><tr><th>Terme</th><th class="num">Définition</th><th class="num">Fréquence</th></tr></thead>
+          <tbody>
+            <tr><td><b>Grossesse prolongée</b></td><td class="num">≥ 41 SA + 0 j</td><td class="num">15 – 20 %</td></tr>
+            <tr><td><b>Terme dépassé / post-terme</b></td><td class="num">≥ 42 SA + 0 j (294 jours)</td><td class="num">≈ 1 %</td></tr>
+          </tbody>
+        </table></div>
+        <div class="trap"><b>La 1<sup>re</sup> cause de « faux terme dépassé » est une erreur de datation.</b> Avant tout diagnostic de post-terme, on <b>re-vérifie toujours</b> la DDR et l'échographie du 1<sup>er</sup> trimestre.</div>
+        <h4>Syndrome de post-maturité (syndrome de Clifford) — ≈ 20 % des post-termes</h4>
+        <p>Nouveau-né <b>maigre</b> · peau <b>sèche, desquamante et fissurée</b> · ongles longs · absence de vernix et de lanugo · imprégnation <b>méconiale</b> verdâtre de la peau et du cordon · <b>faciès de vieillard</b>, regard vif. Il traduit une <b>insuffisance placentaire</b> : le placenta « vieillit » et ne nourrit plus.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="synthese">
+    <p class="eyebrow">2 · Classer</p>
+    <h2>Le tableau à connaître par cœur</h2>
+    <div class="tw"><table>
+      <thead><tr><th>Catégorie</th><th class="num">Âge gestationnel</th><th>Viabilité</th><th>Risque dominant</th></tr></thead>
+      <tbody>
+        <tr><td><b style="color:var(--avo)">Avortement</b></td><td class="num">&lt; 22 SA (ou &lt; 500 g)</td><td>Non viable</td><td>Hémorragie, infection maternelle</td></tr>
+        <tr><td><b style="color:var(--pre)">Prématuré</b></td><td class="num">22 SA → 36 SA + 6 j</td><td>Variable (≥ 24 SA)</td><td><b>Immaturité</b> : poumon, cerveau, digestif</td></tr>
+        <tr><td><b style="color:var(--ter)">À terme</b></td><td class="num">37 SA → 41 SA + 6 j</td><td>Optimale</td><td>Minimal (optimum 39–40 SA)</td></tr>
+        <tr><td><b style="color:var(--post)">Post-terme</b></td><td class="num">≥ 42 SA</td><td>Bonne mais menacée</td><td><b>Insuffisance placentaire</b>, MFIU</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="poids">
+    <p class="eyebrow">2 · Classer — le piège</p>
+    <h2>Terme ≠ poids : deux axes indépendants</h2>
+    <div class="tw"><table>
+      <thead><tr><th>Axe</th><th>Critère</th><th>Vocabulaire</th></tr></thead>
+      <tbody>
+        <tr><td><b>Terme</b> (âge gestationnel)</td><td>Le <b>temps</b></td><td>Prématuré · à terme · post-terme</td></tr>
+        <tr><td><b>Poids de naissance</b></td><td>Les <b>grammes</b></td><td>Faible &lt; 2500 g · très faible &lt; 1500 g · extrêmement faible &lt; 1000 g · macrosome ≥ 4000 g</td></tr>
+        <tr><td><b>Poids rapporté au terme</b></td><td>Les <b>percentiles</b></td><td>Hypotrophe / RCIU &lt; 10<sup>e</sup> · eutrophe 10–90<sup>e</sup> · macrosome / LGA &gt; 90<sup>e</sup></td></tr>
+      </tbody>
+    </table></div>
+    <div class="trap"><b>Prématuré ≠ petit poids.</b> Un enfant peut être <b>prématuré et eutrophe</b>, ou <b>à terme et hypotrophe</b>. Question type du jury : « Un nouveau-né de 2 200 g est-il prématuré ? » → <b>on ne peut pas répondre</b> : le poids seul ne définit jamais le terme.</div>
+  </section>
+
+  <!-- ============ 3 · AGIR ============ -->
+  <section id="map">
+    <p class="eyebrow">3 · Agir — avant 37 SA</p>
+    <h2>Menace d'accouchement prématuré</h2>
+
+    <h3>Complications du prématuré, appareil par appareil</h3>
+    <div class="stack">
+      <div class="row-item"><span class="tag">Poumon</span><p>Maladie des membranes hyalines (déficit en surfactant), dysplasie bronchopulmonaire, apnées</p></div>
+      <div class="row-item"><span class="tag">Cerveau</span><p>Hémorragie intraventriculaire, leucomalacie périventriculaire, séquelles neuro-développementales</p></div>
+      <div class="row-item"><span class="tag">Cœur</span><p>Persistance du canal artériel</p></div>
+      <div class="row-item"><span class="tag">Digestif</span><p>Entérocolite ulcéro-nécrosante (ECUN), difficultés d'alimentation</p></div>
+      <div class="row-item"><span class="tag">Foie</span><p>Ictère par immaturité de la glycuronoconjugaison</p></div>
+      <div class="row-item"><span class="tag">Œil</span><p>Rétinopathie du prématuré</p></div>
+      <div class="row-item"><span class="tag">Métabolique</span><p>Hypothermie, hypoglycémie, hypocalcémie</p></div>
+      <div class="row-item"><span class="tag">Immunité</span><p>Infections néonatales par immaturité immunitaire</p></div>
+    </div>
+
+    <h3>Les 5 gestes qui sauvent</h3>
+    <ol class="steps">
+      <li><div><b>Corticothérapie anténatale</b><span>Bétaméthasone 12 mg IM × 2 à 24 h d'intervalle, entre <b>24 et 34 SA</b>. La mesure la plus efficace : divise par 2 la maladie des membranes hyalines, l'hémorragie intraventriculaire et la mortalité néonatale.</span></div></li>
+      <li><div><b>Tocolyse — 48 heures</b><span>Inhibiteur calcique (nifédipine) ou atosiban. Ne sert qu'à laisser agir les corticoïdes et organiser le transfert. Contre-indiquée si chorio-amniotite, souffrance fœtale, hémorragie sévère.</span></div></li>
+      <li><div><b>Sulfate de magnésium</b><span>Neuroprotection fœtale <b>avant 32 SA</b>.</span></div></li>
+      <li><div><b>Transfert in utero</b><span>Vers une maternité de <b>niveau III</b>. « Le meilleur incubateur de transport, c'est l'utérus de sa mère. »</span></div></li>
+      <li><div><b>Antibiothérapie</b><span>Recherche et traitement de l'infection, prophylaxie du <b>streptocoque B</b>, antibiotiques systématiques en cas de RPM.</span></div></li>
+    </ol>
+
+    <div class="good"><b>Prévention.</b> Dépistage et traitement des infections · cerclage si béance cervico-isthmique · progestérone si col court ou antécédent · arrêt du tabac · repos · espacement des naissances.</div>
+  </section>
+
+  <section id="cat-terme">
+    <p class="eyebrow">3 · Agir — après 37 SA</p>
+    <h2>À terme et au-delà</h2>
+
+    <h3>Grossesse à terme — 37 à 41 SA</h3>
+    <ul>
+      <li>Rythme des consultations : <b>mensuel avant 28 SA</b>, toutes les <b>2–3 semaines de 28 à 36 SA</b>, <b>hebdomadaire</b> ensuite</li>
+      <li>Vérifier : présentation (sommet ?), bassin, bruits du cœur, hauteur utérine, tension artérielle, protéinurie</li>
+      <li>Bassin normal : promontoire non atteint · lignes innominées suivies sur leur tiers antérieur · épines sciatiques mousses</li>
+      <li><b>Pas de déclenchement de convenance avant 39 SA</b></li>
+    </ul>
+
+    <h3>Grossesse prolongée — à partir de 41 SA</h3>
+    <ol class="steps">
+      <li><div><b>Re-dater la grossesse</b><span>DDR + échographie du 1<sup>er</sup> trimestre. Toujours en premier.</span></div></li>
+      <li><div><b>Surveiller tous les 2 à 3 jours</b><span>RCF / test de non-stress · index de liquide amniotique · score biophysique de Manning · Doppler ombilical · comptage des mouvements actifs fœtaux par la mère.</span></div></li>
+      <li><div><b>Déclencher entre 41 SA et 42 SA</b><span>Score de Bishop ≥ 6–7 (col favorable) → ocytocine + amniotomie. Col défavorable → maturation cervicale par prostaglandines (dinoprostone, misoprostol) ou sonde de Foley.</span></div></li>
+      <li><div><b>Césarienne</b><span>Si contre-indication au déclenchement, échec, ou souffrance fœtale.</span></div></li>
+    </ol>
+
+    <h3>Pourquoi ne pas laisser la grossesse se prolonger</h3>
+    <div class="grid2">
+      <div>
+        <h4>Risques fœtaux</h4>
+        <ul>
+          <li>Insuffisance placentaire → hypoxie chronique</li>
+          <li>Oligoamnios → compression funiculaire</li>
+          <li>Liquide méconial → inhalation méconiale</li>
+          <li>Macrosomie → dystocie des épaules</li>
+          <li>Souffrance fœtale aiguë</li>
+          <li><b>Mort fœtale in utero</b></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Risques maternels</h4>
+        <ul>
+          <li>Dystocie liée à la macrosomie</li>
+          <li>Augmentation du taux de césariennes</li>
+          <li>Extractions instrumentales plus fréquentes</li>
+          <li>Déchirures périnéales</li>
+          <li>Hémorragie de la délivrance</li>
+          <li>Retentissement psychologique, anxiété</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">Le placenta a une durée de vie limitée : au-delà de 41 SA, il ne suit plus la croissance du fœtus.</div>
+  </section>
+
+  <!-- ============ AUTO-TEST ============ -->
+  <section id="autotest">
+    <p class="eyebrow">Réviser</p>
+    <h2>Auto-test</h2>
+    <p class="lead">Réponds à voix haute, puis ouvre pour vérifier.</p>
+
+    <details><summary>SA = SG + combien ?</summary><div><b>+ 2 semaines.</b> SA compte depuis les dernières règles, SG depuis la fécondation.</div></details>
+    <details><summary>Énonce la règle de Naegele.</summary><div><b>DPA = DDR − 3 mois + 7 jours (+ 1 an).</b> Valable si cycles réguliers de 28 jours, DDR certaine, pas de contraception hormonale récente.</div></details>
+    <details><summary>Quelle est la datation la plus fiable, et quand ?</summary><div>La <b>longueur cranio-caudale (LCC)</b> à l'échographie du 1<sup>er</sup> trimestre, <b>entre 11 et 14 SA</b> : précision ± 3 à 5 jours.</div></details>
+    <details><summary>Pourquoi ne peut-on pas dater au 3<sup>e</sup> trimestre ?</summary><div>Parce que la variabilité biologique de la croissance fœtale augmente avec le terme : la précision tombe à <b>± 2 à 3 semaines</b>. Au T3, on évalue la croissance, pas l'âge.</div></details>
+    <details><summary>Cite les 4 catégories avec leurs bornes.</summary><div><b>Avortement</b> &lt; 22 SA · <b>Prématuré</b> 22 → 36 SA + 6 j · <b>À terme</b> 37 → 41 SA + 6 j · <b>Post-terme</b> ≥ 42 SA.</div></details>
+    <details><summary>Quelle est la limite de viabilité ?</summary><div>≈ <b>24 SA</b> (et/ou 500 g). Entre 22 et 24 SA : « zone grise », décision au cas par cas.</div></details>
+    <details><summary>Donne la sous-classification de la prématurité.</summary><div><b>Extrême</b> &lt; 28 SA · <b>Grande</b> 28 – 31+6 · <b>Modérée</b> 32 – 33+6 · <b>Tardive</b> 34 – 36+6 (≈ 70 % des prématurés).</div></details>
+    <details><summary>Les deux mécanismes de la prématurité et leurs proportions ?</summary><div><b>Spontanée ≈ 70 %</b> (travail prématuré, RPM) et <b>induite ≈ 30 %</b> (extraction médicalement décidée).</div></details>
+    <details><summary>Facteur de risque le plus prédictif d'accouchement prématuré ?</summary><div>L'<b>antécédent personnel d'accouchement prématuré</b>.</div></details>
+    <details><summary>Mesure la plus efficace en cas de menace d'accouchement prématuré ?</summary><div>La <b>corticothérapie anténatale</b> : bétaméthasone 12 mg IM × 2 à 24 h d'intervalle, entre <b>24 et 34 SA</b>.</div></details>
+    <details><summary>À quoi sert réellement la tocolyse ?</summary><div>Uniquement à <b>gagner 48 heures</b> — le temps que les corticoïdes agissent et que le transfert in utero soit organisé.</div></details>
+    <details><summary>Subdivision ACOG de la période « à terme » ?</summary><div><b>Terme précoce</b> 37+0 → 38+6 · <b>terme plein</b> 39+0 → 40+6 (optimum) · <b>terme tardif</b> 41+0 → 41+6.</div></details>
+    <details><summary>Différence entre grossesse prolongée et terme dépassé ?</summary><div><b>Prolongée : ≥ 41 SA</b> (15–20 %). <b>Terme dépassé / post-terme : ≥ 42 SA</b> = 294 jours (≈ 1 %).</div></details>
+    <details><summary>Premier réflexe devant un « terme dépassé » ?</summary><div><b>Re-dater.</b> La 1<sup>re</sup> cause de faux post-terme est une erreur de datation.</div></details>
+    <details><summary>Décris le syndrome de Clifford.</summary><div>Nouveau-né maigre, peau sèche desquamante et fissurée, ongles longs, absence de vernix et de lanugo, imprégnation méconiale verdâtre, faciès de vieillard, regard vif. Traduit une <b>insuffisance placentaire</b>.</div></details>
+    <details><summary>Un nouveau-né de 2 200 g est-il prématuré ?</summary><div><b>On ne peut pas répondre.</b> La prématurité se définit par l'âge gestationnel, pas par le poids. 2 200 g peut être un prématuré eutrophe <b>ou</b> un nouveau-né à terme hypotrophe.</div></details>
+    <details><summary>Une patiente en travail à 36 SA + 6 j : prématuré ou à terme ?</summary><div><b>Prématuré</b> — le terme n'est atteint qu'à 37 SA + 0 j. Il s'agit d'une prématurité tardive.</div></details>
+    <details><summary>Comment choisit-on la méthode de déclenchement ?</summary><div>Selon le <b>score de Bishop</b>. Bishop ≥ 6–7 → ocytocine + amniotomie. Col défavorable → prostaglandines ou sonde de Foley.</div></details>
+  </section>
+
+  <section id="pieges">
+    <p class="eyebrow">Réviser</p>
+    <h2>Les 8 pièges à éviter</h2>
+    <ol>
+      <li>Confondre <b>SA</b> et <b>SG</b> (SA = SG + 2).</li>
+      <li>Dater sur une échographie du <b>3<sup>e</sup> trimestre</b> (± 3 semaines).</li>
+      <li>Oublier de <b>re-dater</b> avant de porter le diagnostic de terme dépassé.</li>
+      <li>Confondre <b>grossesse prolongée (≥ 41 SA)</b> et <b>terme dépassé (≥ 42 SA)</b>.</li>
+      <li>Confondre <b>prématurité</b> (âge) et <b>hypotrophie / faible poids</b> (grammes).</li>
+      <li>Croire que la prématurité tardive (34–36 SA) est bénigne : c'est la plus <b>fréquente</b>.</li>
+      <li>Programmer un accouchement <b>avant 39 SA</b> sans indication médicale.</li>
+      <li>Oublier que la <b>tocolyse ne gagne que 48 h</b> — l'objectif réel, ce sont les corticoïdes et le transfert.</li>
+    </ol>
+    <div class="key"><b>La phrase de conclusion.</b> Retenez trois nombres — <b>22, 37, 42</b> — et trois verbes : <b>dater</b>, <b>classer</b>, <b>agir</b>. Tout le reste en découle.</div>
+  </section>
+
+  <footer class="page">
+    Sources : Cours d'Obstétrique Dr J. D. Morose (Modules 4 &amp; 5) · Surveillance Prénatale · <i>ECN le tout en un</i> (items 16, 21, 22) · Williams Obstetrics · définitions OMS · ACOG 2013.<br>
+    Document de révision — à confronter au support de cours du professeur.
+  </footer>
+
+</main>
+</div>
+
+</body>
+</html>
